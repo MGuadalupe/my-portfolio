@@ -1,0 +1,1523 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Alto — Guadalupe Vargas</title>
+    <meta name="description"
+        content="Case study: a web app for Alto, a real estate investment startup in Geneva, so investors can explore opportunities without waiting for an agent.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;family=Work+Sans:wght@400;500&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #15171B;
+            --ink-2: #4A4F57;
+            --muted: #5A5F66;
+            --bg: #F5F5F1;
+            --surface: #FFFFFF;
+            --line: rgba(21, 23, 27, 0.10);
+            --line-soft: rgba(21, 23, 27, 0.06);
+            --accent: #2A4BD7;
+            /* Alto surfaces, sampled from the project assets */
+            --alto-night: #191B24;
+            --alto-band: #1C2227;
+            --alto-card: #262B33;
+            --on-dark: #F5F5F1;
+            --on-dark-2: #C9CDD2;
+            --on-dark-muted: #A3A9B1;
+            --line-dark: rgba(245, 245, 241, 0.12);
+            --pad-x: clamp(24px, 5vw, 64px);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-gutter: stable
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 24px;
+            -webkit-font-smoothing: antialiased
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img,
+        video {
+            display: block;
+            max-width: 100%;
+            height: auto
+        }
+
+        figure {
+            margin: 0
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 4px
+        }
+
+        .dark :focus-visible {
+            outline-color: #8FA7FF
+        }
+
+        .serif {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: -0.01em
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: var(--pad-x);
+            padding-right: var(--pad-x)
+        }
+
+        .section {
+            padding-top: 96px;
+            padding-bottom: 96px
+        }
+
+        /* ---------- nav (same as home) ---------- */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(245, 245, 241, 0.86);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line-soft)
+        }
+
+        .nav nav {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            min-height: 44px
+        }
+
+        .navlinks {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap
+        }
+
+        .navlink {
+            padding: 10px 16px;
+            border-radius: 9999px;
+            transition: background .2s
+        }
+
+        .navlink:hover,
+        .navlink[aria-current="page"] {
+            background: rgba(21, 23, 27, 0.06)
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            border: 1px solid rgba(21, 23, 27, 0.14);
+            font-weight: 500;
+            line-height: 20px;
+            transition: transform .2s, background .2s
+        }
+
+        .pill:hover {
+            transform: translateY(-1px);
+            background: var(--surface)
+        }
+
+        .pill.sm {
+            margin-left: 8px;
+            padding: 10px 20px;
+            line-height: 24px
+        }
+
+        /* ---------- type ---------- */
+        h1 {
+            margin: 0;
+            font-size: clamp(40px, 5.6vw, 72px);
+            line-height: 1.02;
+            letter-spacing: -0.035em;
+            font-weight: 500;
+            text-wrap: balance
+        }
+
+        h2 {
+            margin: 0;
+            font-size: clamp(32px, 4.4vw, 48px);
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            font-weight: 500;
+            text-wrap: balance
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 28px;
+            letter-spacing: -0.01em;
+            font-weight: 500
+        }
+
+        .eyebrow {
+            color: var(--muted)
+        }
+
+        .prose {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--ink-2);
+            max-width: 600px
+        }
+
+        .prose p {
+            margin: 0;
+            text-wrap: pretty
+        }
+
+        .prose strong {
+            color: var(--ink);
+            font-weight: 500
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+            gap: 32px 80px;
+            align-items: start
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 24px
+        }
+
+        .head {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px
+        }
+
+        .head p {
+            margin: 0;
+            max-width: 440px;
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--ink-2)
+        }
+
+        /* ---------- dark bands ---------- */
+        .dark {
+            color: var(--on-dark)
+        }
+
+        .dark .eyebrow,
+        .dark .muted {
+            color: var(--on-dark-muted)
+        }
+
+        .dark .prose,
+        .dark .head p,
+        .dark .lede {
+            color: var(--on-dark-2)
+        }
+
+        .dark .prose strong {
+            color: var(--on-dark)
+        }
+
+        /* ---------- hero ---------- */
+        .hero {
+            background: var(--alto-night)
+        }
+
+        .hero-inner {
+            padding-top: 64px;
+            padding-bottom: 64px;
+            display: flex;
+            flex-direction: column;
+            gap: 48px
+        }
+
+        .back {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            color: var(--on-dark-muted);
+            margin-bottom: -24px
+        }
+
+        .back:hover {
+            color: var(--on-dark)
+        }
+
+        .back svg {
+            transition: transform .25s
+        }
+
+        .back:hover svg {
+            transform: translateX(-4px)
+        }
+
+        .hero-head {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 880px
+        }
+
+        .lede {
+            margin: 0;
+            max-width: 600px;
+            font-size: 20px;
+            line-height: 30px;
+            text-wrap: pretty
+        }
+
+        .facts {
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+            gap: 24px 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line-dark)
+        }
+
+        .facts div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .facts dt {
+            color: var(--on-dark-muted)
+        }
+
+        .facts dd {
+            margin: 0;
+            font-weight: 500
+        }
+
+        .hero-shot {
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--line-dark)
+        }
+
+        .hero-shot img {
+            width: 100%
+        }
+
+        /* ---------- context ---------- */
+        .indicator {
+            margin-top: 64px;
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+            align-items: center;
+            overflow: hidden
+        }
+
+        .indicator-copy {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .indicator-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted)
+        }
+
+        .indicator-label::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: #D35270
+        }
+
+        .indicator-copy h3 {
+            font-size: 32px;
+            line-height: 1.12;
+            letter-spacing: -0.02em
+        }
+
+        .indicator-copy p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--ink-2);
+            max-width: 520px
+        }
+
+        .indicator figure {
+            background: var(--alto-night);
+            height: 100%;
+            min-height: 280px;
+            display: grid;
+            place-items: center;
+            padding: 32px
+        }
+
+        .indicator figure img {
+            width: min(320px, 80%)
+        }
+
+        .row-gap {
+            margin-top: 96px
+        }
+
+        .proto-pair {
+            display: grid;
+            /* columns follow each video's width, so both phones end up the same height */
+            grid-template-columns: 440fr 560fr;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--line-soft)
+        }
+
+        .media {
+            position: relative
+        }
+
+        .proto {
+            padding: 40px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px
+        }
+
+        .proto.light {
+            background: var(--surface);
+            color: var(--muted)
+        }
+
+        .proto.dark {
+            background: var(--alto-band);
+            color: var(--on-dark-muted)
+        }
+
+        .proto .media,
+        .proto video {
+            width: 100%
+        }
+
+        .solution-row {
+            align-items: center
+        }
+
+        /* ---------- flows ---------- */
+        .flows {
+            background: var(--alto-band)
+        }
+
+        .persona {
+            margin-top: 64px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px
+        }
+
+        .persona+.persona {
+            margin-top: 96px;
+            padding-top: 96px;
+            border-top: 1px solid var(--line-dark)
+        }
+
+        .who {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        .who img {
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            object-fit: cover
+        }
+
+        .who div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .steps {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(176px, 100%), 1fr));
+            gap: 12px;
+            counter-reset: step
+        }
+
+        .steps li {
+            counter-increment: step;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 16px;
+            background: var(--alto-card);
+            color: var(--on-dark-2)
+        }
+
+        .steps li::before {
+            content: counter(step, decimal-leading-zero);
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            color: #29FFF7
+        }
+
+        .steps li:last-child {
+            background: rgba(41, 255, 247, 0.10);
+            box-shadow: inset 0 0 0 1px rgba(41, 255, 247, 0.4);
+            color: var(--on-dark)
+        }
+
+        .scroller {
+            overflow-x: auto;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--line-dark);
+            padding: 24px
+        }
+
+        .scroller img {
+            min-width: 880px;
+            width: 100%
+        }
+
+        .hint-sm {
+            display: none
+        }
+
+        .figcap {
+            margin-top: 12px;
+            color: var(--on-dark-muted);
+            font-size: 14px;
+            line-height: 20px
+        }
+
+        .screens-shot {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .screens-shot figcaption {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            text-align: center
+        }
+
+        .screens-shot img {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto
+        }
+
+        /* ---------- wireframes ---------- */
+        .wire {
+            margin-top: 48px;
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 32px;
+            padding: clamp(24px, 4vw, 48px);
+            display: grid;
+            place-items: center
+        }
+
+        .wire img {
+            width: min(960px, 100%)
+        }
+
+        /* ---------- style guide ---------- */
+        .guide {
+            background: var(--surface);
+            border-top: 1px solid var(--line-soft);
+            border-bottom: 1px solid var(--line-soft)
+        }
+
+        .keywords {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .keywords li {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            background: #F0F1EE;
+            color: var(--ink-2)
+        }
+
+        .mood {
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px
+        }
+
+        .mood img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 16px
+        }
+
+        .mood-foot {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px
+        }
+
+        .mood-foot p {
+            margin: 0;
+            color: var(--ink-2)
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px 4px 4px;
+            border-radius: 9999px;
+            background: #F0F1EE;
+            font-size: 13px;
+            line-height: 20px;
+            color: var(--ink-2)
+        }
+
+        .chip i {
+            width: 20px;
+            height: 20px;
+            border-radius: 9999px
+        }
+
+        /* UI kit specimen: rendered with Alto's own tokens */
+        .kit {
+            margin-top: 64px;
+            background: #21252E;
+            color: #F5F5F1;
+            border-radius: 32px;
+            padding: clamp(24px, 4vw, 48px);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+            gap: 48px
+        }
+
+        .kit-col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px
+        }
+
+        .kit-col>span {
+            color: var(--on-dark-muted)
+        }
+
+        .ramp {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .ramp-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .ramp-col h3 {
+            font-size: 16px;
+            line-height: 24px;
+            color: var(--on-dark-2)
+        }
+
+        .sw {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .sw i {
+            flex: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12)
+        }
+
+        .sw div {
+            display: flex;
+            flex-direction: column
+        }
+
+        .sw small {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            color: var(--on-dark-muted)
+        }
+
+        .gradient {
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #29FFF7, #8900F5)
+        }
+
+        .gradient-meta {
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            color: var(--on-dark-muted)
+        }
+
+        .specimen {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--line-dark)
+        }
+
+        .specimen div {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: baseline;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line-dark)
+        }
+
+        .specimen dt {
+            font-family: 'Work Sans', 'Inter Tight', sans-serif;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .specimen dd {
+            margin: 0;
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            color: var(--on-dark-muted);
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+            min-width: 48px
+        }
+
+        .specimen-head {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            color: var(--on-dark-muted)
+        }
+
+        /* ---------- mockups ---------- */
+        .mockups {
+            background: var(--alto-band)
+        }
+
+        .desk {
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+            gap: 24px
+        }
+
+        .desk figure {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .desk figcaption {
+            color: var(--on-dark-muted);
+            padding: 0 8px
+        }
+
+        .group-title {
+            margin-top: 64px;
+            color: var(--on-dark-muted);
+            font-size: 16px;
+            line-height: 24px
+        }
+
+        .group-title+.desk {
+            margin-top: 16px
+        }
+
+        /* the second image is wider, so give it more room and the phones read the same size */
+        .desk.mobile {
+            grid-template-columns: 1fr 1.55fr;
+            align-items: end
+        }
+
+        @media (max-width: 860px) {
+            .desk.mobile {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* video pause control (WCAG 2.2.2) */
+        .vctl {
+            all: unset;
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(8px);
+            color: var(--ink);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(44, 72, 96, 0.12);
+            opacity: 0;
+            transition: opacity .2s
+        }
+
+        .media:hover .vctl,
+        .vctl:focus-visible,
+        .vctl[aria-pressed="true"] {
+            opacity: 1
+        }
+
+        @media (hover: none) {
+            .vctl {
+                opacity: 1
+            }
+        }
+
+        .vctl .i-play {
+            display: none
+        }
+
+        .vctl[aria-pressed="true"] .i-play {
+            display: block;
+            margin-left: 2px
+        }
+
+        .vctl[aria-pressed="true"] .i-pause {
+            display: none
+        }
+
+        /* ---------- next ---------- */
+        .next {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+            background: var(--surface);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--line-soft)
+        }
+
+        .next-copy {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 32px;
+            min-height: 320px
+        }
+
+        .next-copy h3 {
+            margin-top: 8px;
+            font-size: 32px;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+            text-wrap: balance
+        }
+
+        .next-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500
+        }
+
+        .next .cover {
+            background: #E9A93A;
+            min-height: 320px;
+            overflow: hidden
+        }
+
+        .next .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s cubic-bezier(.2, .7, .2, 1)
+        }
+
+        .next:hover .cover img {
+            transform: scale(1.03)
+        }
+
+        .arrow {
+            transition: transform .25s
+        }
+
+        .next:hover .arrow,
+        .btn:hover .arrow {
+            transform: translateX(4px)
+        }
+
+        .all-work {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center
+        }
+
+        /* ---------- contact (same as home) ---------- */
+        .contact {
+            background: var(--ink);
+            color: var(--bg);
+            border-radius: 32px;
+            padding: clamp(40px, 7vw, 96px);
+            display: flex;
+            flex-direction: column;
+            gap: 40px
+        }
+
+        .contact h2 {
+            font-size: clamp(40px, 6.6vw, 80px);
+            line-height: 1.0;
+            letter-spacing: -0.035em
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px 14px 28px;
+            border-radius: 9999px;
+            background: var(--bg);
+            color: var(--ink);
+            font-weight: 500;
+            line-height: 20px;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
+            transition: transform .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .btn.line {
+            background: none;
+            padding: 14px 32px;
+            border: 1px solid rgba(245, 245, 241, 0.24);
+            color: var(--bg)
+        }
+
+        footer {
+            margin-top: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            color: var(--muted)
+        }
+
+        @media (max-width: 720px) {
+            .hide-sm {
+                display: none
+            }
+
+            .section {
+                padding-top: 64px;
+                padding-bottom: 64px
+            }
+
+            .row-gap {
+                margin-top: 64px
+            }
+
+            .persona+.persona {
+                margin-top: 64px;
+                padding-top: 64px
+            }
+
+            .indicator-copy,
+            .next-copy {
+                padding: 24px
+            }
+
+            .hero-shot {
+                border-radius: 24px
+            }
+
+            .ramp {
+                grid-template-columns: 1fr
+            }
+
+            .mood {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px
+            }
+
+            .mood img {
+                border-radius: 12px
+            }
+
+            .hint-sm {
+                display: inline
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto
+            }
+
+            .pill,
+            .btn,
+            .arrow,
+            .back svg,
+            .next .cover img {
+                transition: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <nav class="wrap" aria-label="Main">
+            <a class="brand" href="index.html#top">
+                <img src="assets/logo.svg" alt="" width="32" height="32">
+                <span>Guadalupe Vargas</span>
+            </a>
+            <div class="navlinks">
+                <a class="navlink hide-sm" href="index.html#work" aria-current="page">Work</a>
+                <a class="navlink hide-sm" href="index.html#experience">Experience</a>
+                <a class="navlink hide-sm" href="index.html#about">About</a>
+                <a class="navlink hide-sm" href="#contact">Contact</a>
+                <a class="pill sm" href="assets/cv-mariel-guadalupe-vargas.pdf">Résumé
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M6 10l6 6 6-6M5 20h14"></path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero dark">
+            <div class="wrap hero-inner">
+                <a class="back" href="index.html#work">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 12H5M11 6l-6 6 6 6"></path>
+                    </svg>
+                    All work</a>
+
+                <div class="hero-head">
+                    <span class="eyebrow">Alto · Product designer</span>
+                    <h1>Increasing investment in real <span class="serif">estate</span></h1>
+                    <p class="lede">A virtual investment portfolio for Alto, a real estate startup in Geneva, so
+                        investors can explore projects and plan payments on their own instead of waiting for an
+                        agent.</p>
+                </div>
+
+
+
+                <figure class="hero-shot">
+                    <img src="assets/alto/cover.webp" width="2400" height="1656"
+                        alt="Three screens of the Alto PM app on mobile, showing the portfolio, the dashboard and a hotel project, next to the Alto logo">
+                </figure>
+                <dl class="facts">
+                    <div>
+                        <dt>Role</dt>
+                        <dd>Product designer</dd>
+                    </div>
+                    <div>
+                        <dt>Client</dt>
+                        <dd>Alto, Geneva</dd>
+                    </div>
+                    <div>
+                        <dt>Team</dt>
+                        <dd>Product owner, 5 developers, QA lead</dd>
+                    </div>
+                    <div>
+                        <dt>Deliverables</dt>
+                        <dd>Web app and UI kit</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- CONTEXT + PROBLEM + HYPOTHESIS -->
+        <section class="wrap section">
+            <div class="split">
+                <h2>The <span class="serif">context</span></h2>
+                <div class="prose">
+                    <p>Alto has a portfolio of real estate investments across Europe, including hotel constructions and
+                        large renovation projects, and stands out for its tailored payment plans.</p>
+                    <p>But the new opportunities that kept arising had <strong>a significant deficit of
+                            investors</strong>. Agents had to leave their daily tasks and go out to sell the projects
+                        themselves.</p>
+                </div>
+            </div>
+
+            <div class="indicator">
+                <div class="indicator-copy">
+                    <span class="indicator-label">Indicator</span>
+                    <h3>Deficit of investment</h3>
+                    <p>The agents who used to track investments had to shift their focus to finding new investors, or
+                        persuading existing ones to invest in new projects.</p>
+                </div>
+                <figure aria-hidden="true">
+                    <img src="assets/alto/shape-rings.webp" width="800" height="724" alt="" loading="lazy">
+                </figure>
+            </div>
+
+            <div class="split row-gap">
+                <h2>The <span class="serif">problem</span></h2>
+                <div class="prose">
+                    <p>The lack of investment didn’t come from projects being uninteresting or unprofitable, nor from
+                        agents selling them poorly.</p>
+                    <p><strong>Agents could only offer each possible investor a 30-minute meeting.</strong> Even when
+                        those meetings repeated, they happened within a short span of time, so investors never had
+                        enough time to consider an investment or build trust in a project.</p>
+                </div>
+            </div>
+
+            <div class="split row-gap solution-row">
+                <div class="proto-pair">
+                    <figure class="proto light">
+                        <div class="media">
+                            <video data-autoplay data-loop muted playsinline preload="metadata"
+                                poster="assets/alto/prototype-light.webp" width="362" height="736"
+                                aria-label="Wireframe prototype: Christian logs in and sees Opportunities, My portfolio, Secondary market and a button to schedule a call">
+                                <source src="assets/alto/prototype-light.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption>Wireframe</figcaption>
+                    </figure>
+                    <figure class="proto dark">
+                        <div class="media">
+                            <video data-autoplay data-loop muted playsinline preload="metadata"
+                                poster="assets/alto/prototype-dark.webp" width="560" height="786"
+                                aria-label="High-fidelity prototype: scrolling the investor portfolio with expected amount, coupons received and KPIs">
+                                <source src="assets/alto/prototype-dark.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <figcaption>Mockup</figcaption>
+                    </figure>
+                </div>
+                <div class="stack">
+                    <h2>The hypothetical <span class="serif">solution</span></h2>
+                    <div class="prose">
+                        <p>The core problem was a communication channel that relied entirely on agents.</p>
+                        <p>So I proposed a new platform where <strong>investors could actively search for
+                                opportunities and customize their payment plans</strong> to fit their needs, with agents
+                            joining when the investor was ready.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLOWS -->
+        <section class="flows dark">
+            <div class="wrap section">
+                <div class="head">
+                    <h2>Task flows and user <span class="serif">flows</span></h2>
+                    <p>Two people use the platform: an agent who needs to book time with investors, and an investor
+                        who wants to apply on his own.</p>
+                </div>
+
+                <article class="persona">
+                    <div class="who">
+                        <img src="assets/alto/frida.webp" width="160" height="160" alt="" loading="lazy">
+                        <div>
+                            <h3>Frida, Alto agent</h3>
+                            <span class="muted">Arrange an appointment with a potential investor</span>
+                        </div>
+                    </div>
+                    <ol class="steps" aria-label="Frida’s task flow">
+                        <li>Logs in to Alto</li>
+                        <li>Opens the Opportunities section</li>
+                        <li>Finds the project she wants to offer her client</li>
+                        <li>Opens the project details</li>
+                        <li>Arranges an appointment with the investor</li>
+                    </ol>
+                    <figure>
+                        <div class="scroller" tabindex="0" role="region" aria-label="Frida’s user flow, scrollable">
+                            <img src="assets/alto/flow-agent.webp" width="2000" height="1177" loading="lazy"
+                                alt="User flow: Investors, select or search a registered investor, investor profile, contact investor, appointment form, fill and send. If the information is wrong, an error message; if correct, the appointment is saved and sent to both users.">
+                        </div>
+                        <figcaption class="figcap">User flow<span class="hint-sm"> · scroll sideways to see it
+                                all</span></figcaption>
+                    </figure>
+                    <figure class="screens-shot">
+                        <img src="assets/alto/screens-agent.webp" width="2000" height="1234" loading="lazy"
+                            alt="Four mobile screens: My investors list, Add a new investor form, the new investor profile and a success message">
+                        <figcaption><strong style="font-weight:500">Add an investor</strong></figcaption>
+                    </figure>
+                </article>
+
+                <article class="persona">
+                    <div class="who">
+                        <img src="assets/alto/christian.webp" width="160" height="160" alt="" loading="lazy">
+                        <div>
+                            <h3>Christian, real estate investor</h3>
+                            <span class="muted">Apply for a potential investment</span>
+                        </div>
+                    </div>
+                    <ol class="steps" aria-label="Christian’s task flow">
+                        <li>Signs in to Alto</li>
+                        <li>Validates his account</li>
+                        <li>Chooses a project in Opportunities</li>
+                        <li>Asks to invest in that project</li>
+                        <li>Books an appointment with an agent to evaluate the investment</li>
+                    </ol>
+                    <figure>
+                        <div class="scroller" tabindex="0" role="region" aria-label="Christian’s user flow, scrollable">
+                            <img src="assets/alto/flow-investor.webp" width="2000" height="1398" loading="lazy"
+                                alt="User flow: Opportunities, pick a project, project details, click invest, appointment form, fill and send. If the information is wrong, an error message; if correct, the appointment is saved and sent to both users.">
+                        </div>
+                        <figcaption class="figcap">User flow<span class="hint-sm"> · scroll sideways to see it
+                                all</span></figcaption>
+                    </figure>
+                    <figure class="screens-shot">
+                        <img src="assets/alto/screens-investor.webp" width="2000" height="1234" loading="lazy"
+                            alt="Mobile screens of the investor app: dashboard, opportunities and a hotel project detail">
+                        <figcaption><strong style="font-weight:500">Ask for information about an
+                                investment</strong></figcaption>
+                    </figure>
+                </article>
+            </div>
+        </section>
+
+        <!-- WIREFRAMES -->
+        <section class="wrap section">
+            <h2><span class="serif">Wireframes</span></h2>
+            <figure class="wire">
+                <img src="assets/alto/wireframes.webp" width="1800" height="2452" loading="lazy"
+                    alt="Grey-scale wireframes of the investor app screens, connected to show navigation">
+            </figure>
+        </section>
+
+        <!-- STYLE GUIDE -->
+        <section class="guide">
+            <div class="wrap section">
+                <div class="split">
+                    <h2>Style <span class="serif">guide</span></h2>
+                    <div class="stack">
+                        <div class="prose">
+                            <p>My goal was to build a UI kit. I started with a moodboard to find the right look and
+                                feel, and presented three proposals based on keywords from stakeholder interviews:</p>
+                        </div>
+                        <ul class="keywords" aria-label="Keywords from stakeholder interviews">
+                            <li>Tech</li>
+                            <li>Crypto</li>
+                            <li>Sustainability</li>
+                            <li>Vibrant colors</li>
+                            <li>Nature</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mood" role="group" aria-label="Moodboard">
+                    <img src="assets/alto/mood-1.webp" alt="Virtual bank landing page with a glass card" loading="lazy">
+                    <img src="assets/alto/mood-2.webp" alt="Payments landing page with a purple gradient"
+                        loading="lazy">
+                    <img src="assets/alto/mood-3.webp" alt="Logo concept on a violet background" loading="lazy">
+                    <img src="assets/alto/mood-4.webp" alt="Payment landing page with glass cards" loading="lazy">
+                    <img src="assets/alto/mood-5.webp" alt="Online payments landing page in dark blue" loading="lazy">
+                    <img src="assets/alto/mood-6.webp" alt="Brand identity with a bold gradient mark" loading="lazy">
+                    <img src="assets/alto/mood-7.webp" alt="Finance app screen on a blue background" loading="lazy">
+                    <img src="assets/alto/mood-8.webp" alt="Shopping payments landing page with a phone" loading="lazy">
+                </div>
+                <div class="mood-foot">
+                    <p>Gradients, rounded shapes, bold typography, color and glassmorphism.</p>
+                    <div class="chips" aria-label="Moodboard colors">
+                        <span class="chip"><i style="background:#D35270"></i><span class="mono">#D35270</span></span>
+                        <span class="chip"><i style="background:#6641BE"></i><span class="mono">#6641BE</span></span>
+                        <span class="chip"><i style="background:#502DFF"></i><span class="mono">#502DFF</span></span>
+                        <span class="chip"><i style="background:#04C2EC"></i><span class="mono">#04C2EC</span></span>
+                    </div>
+                </div>
+
+                <div class="kit">
+                    <div class="kit-col">
+                        <span>Color palette · core and actions</span>
+                        <div class="ramp">
+                            <div class="ramp-col">
+                                <h3>Primary</h3>
+                                <div class="sw"><i style="background:#E8FFF3"></i>
+                                    <div>Surface<small>#E8FFF3</small></div>
+                                </div>
+                                <div class="sw"><i style="background:#29FFF7"></i>
+                                    <div>Default<small>#29FFF7</small></div>
+                                </div>
+                                <div class="sw"><i style="background:#161E33"></i>
+                                    <div>Contrast<small>#161E33</small></div>
+                                </div>
+                            </div>
+                            <div class="ramp-col">
+                                <h3>Secondary</h3>
+                                <div class="sw"><i style="background:#DCDCFF"></i>
+                                    <div>Surface<small>#DCDCFF</small></div>
+                                </div>
+                                <div class="sw"><i style="background:#6968FF"></i>
+                                    <div>Default<small>#6968FF</small></div>
+                                </div>
+                                <div class="sw"><i style="background:#8900F5"></i>
+                                    <div>Contrast<small>#8900F5</small></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="gradient" role="img" aria-label="Linear gradient from cyan to violet"></div>
+                            <div class="gradient-meta"><span>#29FFF7</span><span>Linear
+                                    gradient</span><span>#8900F5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kit-col">
+                        <span>Typography · Work Sans</span>
+                        <dl class="specimen">
+                            <div class="specimen-head"><span>Style</span><span>Desktop</span><span>Mobile</span>
+                            </div>
+                            <div>
+                                <dt style="font-size: clamp(22px, 4vw, 48px); line-height: 1.1">Headline 1</dt>
+                                <dd>60px</dd>
+                                <dd>48px</dd>
+                            </div>
+                            <div>
+                                <dt style="font-size: clamp(18px, 2.8vw, 32px); line-height: 1.2">Headline 2</dt>
+                                <dd>40px</dd>
+                                <dd>30px</dd>
+                            </div>
+                            <div>
+                                <dt style="font-size: 16px; line-height: 24px">Body</dt>
+                                <dd>16px</dd>
+                                <dd>16px</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOCKUPS -->
+        <section class="mockups dark">
+            <div class="wrap section">
+                <div class="head">
+                    <h2>Final <span class="serif">design</span></h2>
+                    <p>A responsive web app for desktop and mobile.</p>
+                </div>
+                <h3 class="group-title">Desktop</h3>
+                <div class="desk">
+                    <figure>
+                        <img src="assets/alto/desktop-home.webp" width="2000" height="1868" loading="lazy"
+                            alt="Desktop dashboard: welcome banner, last projects visited and side navigation">
+                        <figcaption>Dashboard</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets/alto/desktop-project.webp" width="2000" height="2088" loading="lazy"
+                            alt="Desktop project page for Mandala Hotel with photos, key figures and a description">
+                        <figcaption>Project detail</figcaption>
+                    </figure>
+                </div>
+
+                <h3 class="group-title">Mobile</h3>
+                <div class="desk mobile">
+                    <figure>
+                        <img src="assets/alto/mobile-portfolio.webp" width="1400" height="1569" loading="lazy"
+                            alt="Three mobile screens: My portfolio with an investment breakdown chart, the dashboard and the Mandala hotel project">
+                        <figcaption>Portfolio, dashboard and project</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets/alto/mobile-profit.webp" width="1600" height="931" loading="lazy"
+                            alt="Four mobile screens: portfolio timeline, breakdown chart, capital structure and a cash-flow simulator">
+                        <figcaption>Details of the possible profit</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEXT -->
+        <section class="wrap section">
+            <a class="next" href="https://guadalupe-vargas.framer.website/bridgebuilders">
+                <div class="next-copy">
+                    <div>
+                        <span class="eyebrow">Next case study · Bridge Builders</span>
+                        <h3>A new way to generate business connections</h3>
+                    </div>
+                    <span class="next-cta">Read case study
+                        <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14M13 6l6 6-6 6"></path>
+                        </svg></span>
+                </div>
+                <div class="cover"><img src="assets/bridge-builders.webp" alt="" loading="lazy"></div>
+            </a>
+            <div class="all-work"><a class="pill" href="index.html#work">See all work</a></div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="wrap" style="padding-bottom: 64px">
+            <div class="contact">
+                <span style="color: #A3A9B1">Contact</span>
+                <h2>Let’s <span class="serif">talk.</span></h2>
+                <p style="margin: 0; max-width: 520px; font-size: 20px; line-height: 30px; color: #C9CDD2">Would you
+                    like to work together? Don’t hesitate to reach out anytime.</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                    <a class="btn" href="mailto:marielguadalupevargas@gmail.com">marielguadalupevargas@gmail.com
+                        <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M8 7h9v9"></path>
+                        </svg>
+                    </a>
+                    <a class="btn line" href="https://www.linkedin.com/in/mariel-guadalupe/">LinkedIn</a>
+                </div>
+            </div>
+            <footer>
+                <span>© 2026 Mariel Guadalupe Vargas</span>
+                <span>Barcelona, Spain</span>
+            </footer>
+        </section>
+    </main>
+
+    <script>
+        // Videos: play only while visible, respect reduced motion, and give each loop a pause control.
+        (function () {
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var vids = document.querySelectorAll('video[data-autoplay]');
+            var pauseSvg = '<svg class="i-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+            var playSvg = '<svg class="i-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>';
+
+            vids.forEach(function (v) {
+                v.loop = v.hasAttribute('data-loop');
+                v.muted = true;
+                var userPaused = reduce;
+                if (v.loop) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'vctl';
+                    b.innerHTML = pauseSvg + playSvg;
+                    function sync() {
+                        b.setAttribute('aria-pressed', String(userPaused));
+                        b.setAttribute('aria-label', userPaused ? 'Play video' : 'Pause video');
+                    }
+                    b.addEventListener('click', function () {
+                        userPaused = !userPaused;
+                        if (userPaused) v.pause(); else v.play().catch(function () { });
+                        sync();
+                    });
+                    sync();
+                    v.parentNode.appendChild(b);
+                }
+                v._paused = function () { return userPaused; };
+            });
+
+            if (reduce) return;
+            if (!('IntersectionObserver' in window)) { vids.forEach(function (v) { v.play().catch(function () { }); }); return; }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    var v = e.target;
+                    if (e.isIntersecting && !v._paused()) {
+                        if (v.preload === 'none') v.preload = 'auto';
+                        v.play().catch(function () { });
+                    } else if (!e.isIntersecting) v.pause();
+                });
+            }, { threshold: 0.35 });
+            vids.forEach(function (v) { io.observe(v); });
+        })();
+    </script>
+</body>
+
+</html>

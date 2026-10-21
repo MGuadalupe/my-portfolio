@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ITSAP — Guadalupe Vargas</title>
+    <meta name="description"
+        content="Case study: a new laboratory directory for ITSAP, the French apiculture institute, built around a large map and three types of search.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #15171B;
+            --ink-2: #4A4F57;
+            --muted: #5A5F66;
+            --bg: #F5F5F1;
+            --surface: #FFFFFF;
+            --line: rgba(21, 23, 27, 0.10);
+            --line-soft: rgba(21, 23, 27, 0.06);
+            --accent: #2A4BD7;
+            /* ITSAP surfaces, sampled from the project assets */
+            --it-lilac: #F4F0F8;
+            --it-honey: #FFDA64;
+            --pad-x: clamp(24px, 5vw, 64px);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-gutter: stable
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 24px;
+            -webkit-font-smoothing: antialiased
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img,
+        video {
+            display: block;
+            max-width: 100%;
+            height: auto
+        }
+
+        figure {
+            margin: 0
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 4px
+        }
+
+        .serif {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: -0.01em
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: var(--pad-x);
+            padding-right: var(--pad-x)
+        }
+
+        .section {
+            padding-top: 96px;
+            padding-bottom: 96px
+        }
+
+        /* ---------- nav (same as home) ---------- */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(245, 245, 241, 0.86);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line-soft)
+        }
+
+        .nav nav {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            min-height: 44px
+        }
+
+        .navlinks {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap
+        }
+
+        .navlink {
+            padding: 10px 16px;
+            border-radius: 9999px;
+            transition: background .2s
+        }
+
+        .navlink:hover,
+        .navlink[aria-current="page"] {
+            background: rgba(21, 23, 27, 0.06)
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            border: 1px solid rgba(21, 23, 27, 0.14);
+            font-weight: 500;
+            line-height: 20px;
+            transition: transform .2s, background .2s
+        }
+
+        .pill:hover {
+            transform: translateY(-1px);
+            background: var(--surface)
+        }
+
+        .pill.sm {
+            margin-left: 8px;
+            padding: 10px 20px;
+            line-height: 24px
+        }
+
+        /* ---------- type ---------- */
+        h1 {
+            margin: 0;
+            font-size: clamp(40px, 5.6vw, 72px);
+            line-height: 1.02;
+            letter-spacing: -0.035em;
+            font-weight: 500;
+            text-wrap: balance
+        }
+
+        h2 {
+            margin: 0;
+            font-size: clamp(32px, 4.4vw, 48px);
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            font-weight: 500;
+            text-wrap: balance
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 28px;
+            letter-spacing: -0.01em;
+            font-weight: 500
+        }
+
+        .eyebrow {
+            color: var(--muted)
+        }
+
+        .prose {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--ink-2);
+            max-width: 600px
+        }
+
+        .prose p {
+            margin: 0;
+            text-wrap: pretty
+        }
+
+        .prose strong {
+            color: var(--ink);
+            font-weight: 500
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+            gap: 32px 80px;
+            align-items: start
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 24px
+        }
+
+        .head {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px
+        }
+
+        .head p {
+            margin: 0;
+            max-width: 440px;
+            font-size: 18px;
+            line-height: 28px;
+            color: var(--ink-2)
+        }
+
+        /* ---------- hero ---------- */
+        .hero {
+            background: var(--it-lilac);
+            border-bottom: 1px solid var(--line-soft)
+        }
+
+        .hero-inner {
+            padding-top: 64px;
+            padding-bottom: 64px;
+            display: flex;
+            flex-direction: column;
+            gap: 48px
+        }
+
+        .back {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            color: var(--muted);
+            margin-bottom: -24px
+        }
+
+        .back:hover {
+            color: var(--ink)
+        }
+
+        .back svg {
+            transition: transform .25s
+        }
+
+        .back:hover svg {
+            transform: translateX(-4px)
+        }
+
+        .hero-head {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 880px
+        }
+
+        .lede {
+            margin: 0;
+            max-width: 600px;
+            font-size: 20px;
+            line-height: 30px;
+            text-wrap: pretty
+        }
+
+        .facts {
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+            gap: 24px 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line)
+        }
+
+        .facts div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .facts dt {
+            color: var(--muted)
+        }
+
+        .facts dd {
+            margin: 0;
+            font-weight: 500
+        }
+
+        .hero-shot {
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--line-soft)
+        }
+
+        .hero-shot img {
+            width: 100%
+        }
+
+        /* ---------- context ---------- */
+        .row-gap {
+            margin-top: 96px
+        }
+
+        .center {
+            align-items: center
+        }
+
+        .facts a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-decoration: underline;
+            text-decoration-color: rgba(21, 23, 27, 0.3);
+            text-underline-offset: 4px
+        }
+
+        .facts a:hover {
+            text-decoration-color: var(--ink)
+        }
+
+        .sub {
+            font-size: clamp(26px, 3vw, 32px);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            text-wrap: balance
+        }
+
+        .sketches {
+            margin-top: 0 !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 16px !important
+        }
+
+        .sketch-single {
+            max-width: 280px;
+            justify-self: center
+        }
+
+        .tabs {
+            margin-top: 48px;
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 16px 24px;
+            overflow-x: auto
+        }
+
+        .tabs img {
+            min-width: 720px;
+            width: 100%
+        }
+
+        .need-card p strong {
+            color: var(--ink);
+            font-weight: 500
+        }
+
+        .type p strong {
+            color: var(--ink);
+            font-weight: 500
+        }
+
+        /* honey hex marker, from the ITSAP logo */
+        .hex {
+            flex: none;
+            width: 12px;
+            height: 14px;
+            background: var(--it-honey);
+            clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%)
+        }
+
+        .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted)
+        }
+
+        .shot {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .shot .frame {
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 24px;
+            overflow: hidden
+        }
+
+        .shot .frame img {
+            width: 100%
+        }
+
+        .shot figcaption {
+            color: var(--muted);
+            padding: 0 8px
+        }
+
+        .pair {
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+            gap: 24px
+        }
+
+        /* needs */
+        .needs {
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+            gap: 24px
+        }
+
+        .need-card {
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 32px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        .need-card h3 {
+            font-size: 28px;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            text-wrap: balance
+        }
+
+        .need-card p {
+            margin: 0;
+            font-size: 22px;
+            line-height: 32px;
+            letter-spacing: -0.01em;
+            color: var(--ink-2)
+        }
+
+        .note {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            background: #FFF4CC;
+            color: var(--ink);
+            font-weight: 500
+        }
+
+        /* process */
+        .process {
+            background: var(--surface);
+            border-top: 1px solid var(--line-soft);
+            border-bottom: 1px solid var(--line-soft)
+        }
+
+        .sketches {
+            margin-top: 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+            gap: 24px
+        }
+
+        .sketches .frame {
+            background: #EDEBE8;
+            border: 0
+        }
+
+        .sketches img {
+            aspect-ratio: 1000 / 1220;
+            object-fit: cover
+        }
+
+        /* video facade: loads YouTube only after a click */
+        .video {
+            margin-top: 48px;
+            position: relative;
+            /* same ratio as the thumbnail so it shows whole, without cropping */
+            aspect-ratio: 1600 / 722;
+            border-radius: 32px;
+            overflow: hidden;
+            background: #E4E4E4;
+            border: 1px solid var(--line-soft)
+        }
+
+        .video img,
+        .video iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0
+        }
+
+        .video img {
+            object-fit: cover
+        }
+
+        /* once the player loads, switch to the video's own 16:9 */
+        .video.playing {
+            aspect-ratio: 16 / 9
+        }
+
+        .play {
+            all: unset;
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            background: rgba(21, 23, 27, 0.18);
+            transition: background .2s
+        }
+
+        .play:hover {
+            background: rgba(21, 23, 27, 0.08)
+        }
+
+        .play span {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px 14px 20px;
+            border-radius: 9999px;
+            background: var(--surface);
+            color: var(--ink);
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(21, 23, 27, 0.16)
+        }
+
+        .play:focus-visible span {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px
+        }
+
+        .final {
+            margin-top: 48px;
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 32px;
+            padding: clamp(16px, 3vw, 40px)
+        }
+
+        .final img {
+            width: 100%
+        }
+
+        /* types of search */
+        .types {
+            margin: 48px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: 24px
+        }
+
+        .type {
+            background: var(--surface);
+            border: 1px solid var(--line-soft);
+            border-radius: 24px;
+            padding: 32px;
+            background: #F7F6F3;
+            border-color: transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .type .fr {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .type p {
+            margin: 0;
+            color: var(--ink-2)
+        }
+
+        /* outcome */
+        .outcome {
+            background: var(--it-lilac);
+            border-radius: 32px;
+            padding: clamp(32px, 6vw, 64px);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+            gap: 32px 80px;
+            align-items: start
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        .links .pill {
+            background: var(--surface)
+        }
+
+        .next {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+            background: var(--surface);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid var(--line-soft)
+        }
+
+        .next-copy {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 32px;
+            min-height: 320px
+        }
+
+        .next-copy h3 {
+            margin-top: 8px;
+            font-size: 32px;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+            text-wrap: balance
+        }
+
+        .next-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500
+        }
+
+        .next .cover {
+            background: #476471;
+            min-height: 320px;
+            overflow: hidden
+        }
+
+        .next .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s cubic-bezier(.2, .7, .2, 1)
+        }
+
+        .next:hover .cover img {
+            transform: scale(1.03)
+        }
+
+        .arrow {
+            transition: transform .25s
+        }
+
+        .next:hover .arrow,
+        .btn:hover .arrow {
+            transform: translateX(4px)
+        }
+
+        .all-work {
+            margin-top: 24px;
+            display: flex;
+            justify-content: center
+        }
+
+        /* ---------- contact (same as home) ---------- */
+        .contact {
+            background: var(--ink);
+            color: var(--bg);
+            border-radius: 32px;
+            padding: clamp(40px, 7vw, 96px);
+            display: flex;
+            flex-direction: column;
+            gap: 40px
+        }
+
+        .contact h2 {
+            font-size: clamp(40px, 6.6vw, 80px);
+            line-height: 1.0;
+            letter-spacing: -0.035em
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px 14px 28px;
+            border-radius: 9999px;
+            background: var(--bg);
+            color: var(--ink);
+            font-weight: 500;
+            line-height: 20px;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: anywhere;
+            transition: transform .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .btn.line {
+            background: none;
+            padding: 14px 32px;
+            border: 1px solid rgba(245, 245, 241, 0.24);
+            color: var(--bg)
+        }
+
+        footer {
+            margin-top: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            color: var(--muted)
+        }
+
+        @media (max-width: 720px) {
+            .hide-sm {
+                display: none
+            }
+
+            .section {
+                padding-top: 64px;
+                padding-bottom: 64px
+            }
+
+            .row-gap {
+                margin-top: 64px
+            }
+
+            .next-copy {
+                padding: 24px
+            }
+
+            .hero-shot {
+                border-radius: 24px
+            }
+
+            .need-card,
+            .type {
+                padding: 24px
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto
+            }
+
+            .pill,
+            .btn,
+            .arrow,
+            .back svg,
+            .next .cover img {
+                transition: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <nav class="wrap" aria-label="Main">
+            <a class="brand" href="index.html#top">
+                <img src="assets/logo.svg" alt="" width="32" height="32">
+                <span>Guadalupe Vargas</span>
+            </a>
+            <div class="navlinks">
+                <a class="navlink hide-sm" href="index.html#work" aria-current="page">Work</a>
+                <a class="navlink hide-sm" href="index.html#experience">Experience</a>
+                <a class="navlink hide-sm" href="index.html#about">About</a>
+                <a class="navlink hide-sm" href="#contact">Contact</a>
+                <a class="pill sm" href="assets/cv-mariel-guadalupe-vargas.pdf">Résumé
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 4v12M6 10l6 6 6-6M5 20h14"></path>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="wrap hero-inner">
+                <a class="back" href="index.html#work">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 12H5M11 6l-6 6 6 6"></path>
+                    </svg>
+                    All work</a>
+
+                <div class="hero-head">
+                    <span class="eyebrow">ITSAP · Apiculture Institute of France</span>
+                    <h1>Improving scientific platforms and search <span class="serif">methods</span></h1>
+                    <p class="lede">Redesigning the experience and interaction of the ITSAP website and its tools,
+                        starting
+                        with L’Annuaire, the directory of beekeeping laboratories, in collaboration with the Parisian
+                        design agency Pulp.</p>
+                </div>
+
+                <dl class="facts">
+                    <div>
+                        <dt>Role</dt>
+                        <dd>Experience and interaction redesign</dd>
+                    </div>
+                    <div>
+                        <dt>Client</dt>
+                        <dd>ITSAP, Institut de l’Abeille</dd>
+                    </div>
+                    <div>
+                        <dt>Rebranding and visual experience</dt>
+                        <dd>Pulp, design agency in Paris</dd>
+                    </div>
+                    <div>
+                        <dt>Live</dt>
+                        <dd><a href="https://itsap.asso.fr/annuaire-des-laboratoires" target="_blank"
+                                rel="noopener">Annuaire des laboratoires
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M7 17L17 7M8 7h9v9"></path>
+                                </svg><span class="sr-only">(opens in a new tab)</span></a></dd>
+                    </div>
+                </dl>
+
+                <figure class="hero-shot">
+                    <img src="assets/itsap/cover.webp" width="2400" height="1020"
+                        alt="ITSAP Institut de l’Abeille logo over a photo of a bee on a lavender flower">
+                </figure>
+            </div>
+        </section>
+
+        <!-- OVERVIEW -->
+        <section class="wrap section">
+            <div class="split">
+                <h2><span class="serif">Overview</span></h2>
+                <div class="prose">
+                    <p>ITSAP is the National Apiculture Institute of France.</p>
+                    <p>Several years ago, they developed a web portal where they published all the material that might
+                        be useful for apiarists, researchers and entrepreneurs dedicated to the world of bees. For many
+                        years, this website has served as a consultation portal for these users. For this reason, the
+                        technical team and the research team of ITSAP began creating various tools useful for these
+                        users. Among them are L’Annuaire and Diatoxbee.</p>
+                    <p><strong>Both the ITSAP website and these tools were redesigned by me in terms of experience and
+                            interaction. I also collaborated with the Parisian design agency Pulp, who handled the
+                            rebranding and visual experience of the website and these tools.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BEFORE -->
+        <section class="wrap" style="padding-bottom: 96px">
+            <h2><span class="serif">Before</span></h2>
+            <div class="pair">
+                <figure class="shot">
+                    <div class="frame"><img src="assets/itsap/before-directory.webp" width="1400" height="1218"
+                            loading="lazy"
+                            alt="Old laboratory directory: a long legend of analysis types, a small grey map of France and a dense table of labs">
+                    </div>
+                </figure>
+                <figure class="shot">
+                    <div class="frame"><img src="assets/itsap/before-analysis.webp" width="1400" height="1176"
+                            loading="lazy"
+                            alt="Old analysis search: three dropdowns, one of them open with a long list of scientific analysis names">
+                    </div>
+                </figure>
+            </div>
+
+            <div class="split row-gap">
+                <h3 class="sub">The need and the obstacle preventing its solution</h3>
+                <div class="prose">
+                    <p>The idea of having a directory of laboratories within France and neighboring countries arose
+                        because the institute has a large database of laboratories that conduct analyses related to
+                        beekeeping. Often, scientific research requires these analyses, as do apiarists who must
+                        perform mandatory analyses, for example, to be able to sell the honey they produce.</p>
+                    <p>However, I didn’t have access to any metrics to know how useful it was, because at that moment
+                        <strong>they didn’t track anything, they simply observed the database’s growth over the years,
+                            with an increasing number of conversions, in other words, labs registering on the
+                            directory and adding their profiles to the database.</strong> Given this trend, I realized
+                        that the audience was indeed consulting the directory.
+                    </p>
+                </div>
+            </div>
+            <div class="needs">
+                <div class="need-card">
+                    <span class="label"><i class="hex" aria-hidden="true"></i>So, there is a need</span>
+                    <p><strong>Users need to locate the labs nearby.</strong></p>
+                </div>
+                <div class="need-card">
+                    <span class="label"><i class="hex" aria-hidden="true"></i>Another need</span>
+                    <p>If users don’t know the name of the analysis, <strong>they couldn’t search labs using other
+                            metadata</strong> such as ‘topic’, ‘problem’, ‘location’, etc.</p>
+                </div>
+            </div>
+
+            <div class="split row-gap center">
+                <div class="stack">
+                    <h3 class="sub">The problem in the search</h3>
+                    <div class="prose">
+                        <p>The problem that I could detect from stakeholders was that most of the time
+                            <strong>beekeepers don’t know the scientific name of the analysis, and they get lost in how
+                                to find the proper lab to consult.</strong> So, it is very difficult for them to figure
+                            out which are the accurate labs to search for.
+                        </p>
+                        <p>In the previous version of the directory, there wasn’t a clear way to find labs nearby. The
+                            geographic search wasn’t clear: <strong>the user needed to click on a region of France on a
+                                small map to start filtering by region.</strong> After clicking the region, the map
+                            would zoom in on that area, and then the user could click again to select a city.</p>
+                    </div>
+                    <span class="note"><i class="hex" aria-hidden="true"></i>The map was nearly 300 × 300 px.</span>
+                </div>
+                <figure class="shot">
+                    <div class="frame"><img src="assets/itsap/before-map.webp" width="1400" height="853" loading="lazy"
+                            alt="Close-up of the old directory: instructions to click a region and a small grey map of France">
+                    </div>
+                </figure>
+            </div>
+        </section>
+
+        <!-- PROCESS -->
+        <section class="process">
+            <div class="wrap section">
+                <h2>The <span class="serif">process</span></h2>
+
+                <div class="split center" style="margin-top: 48px">
+                    <div class="stack">
+                        <h3 class="sub">Sketching the first ideas</h3>
+                        <div class="prose">
+                            <p>From the beginning, I knew that the map was one of the keys to solving some problems.
+                                So, I was sure that by adding a large map that allows users to navigate while knowing
+                                where they are and what they are looking for, it would increase the possibilities of a
+                                controlled and enhanced search.</p>
+                            <p>So, I started by sketching out a first approach.</p>
+                        </div>
+                    </div>
+                    <div class="sketches">
+                        <figure class="shot">
+                            <div class="frame"><img src="assets/itsap/sketch-map.webp" width="1000" height="1221"
+                                    loading="lazy"
+                                    alt="Paper sketch: a lab list next to a large map with numbered pins">
+                            </div>
+                        </figure>
+                        <figure class="shot">
+                            <div class="frame"><img src="assets/itsap/sketch-filters.webp" width="1000" height="1220"
+                                    loading="lazy"
+                                    alt="Paper sketch: filters for type of analysis, matrix and offer, and a search button">
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="split row-gap center">
+                    <figure class="shot sketch-single">
+                        <div class="frame"><img src="assets/itsap/sketch-detail.webp" width="1000" height="1221"
+                                loading="lazy"
+                                alt="Paper sketch: lab detail page with contact details at the top and the list of analyses below">
+                        </div>
+                    </figure>
+                    <div class="prose">
+                        <p>Another thing that I detected was that the way they presented the details of the lab wasn’t
+                            very useful for users. The most important aspect should be the lab’s contact information or
+                            the possibility to schedule an appointment directly. The aim of this tool is to facilitate
+                            contact between parties.</p>
+                        <p>So I changed the order, and <strong>now the contact is the most important thing in the
+                                detail.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AFTER -->
+        <section class="wrap section">
+            <h2><span class="serif">After</span></h2>
+
+            <div class="split" style="margin-top: 48px">
+                <h3 class="sub">The proposal</h3>
+                <div class="prose">
+                    <p>Here is a video where I presented the idea to the project manager. Sadly, I don’t speak French
+                        very well (not for complex conversations), but she speaks very good Spanish. So, I explained
+                        the idea to her in Spanish, but you can turn on the subtitles!</p>
+                </div>
+            </div>
+            <div class="video" id="proposal-video">
+                <img src="assets/itsap/proposal-thumb.webp" width="1600" height="722" loading="lazy"
+                    alt="Wireframe of the new directory with filters, a lab list and a map of France">
+                <button class="play" type="button" data-yt="T56Aoz3cqxE">
+                    <span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M7 5l12 7-12 7z" />
+                        </svg><b style="font-weight:500">Watch<i class="hide-sm" style="font-style:normal"> the
+                                presentation</i> (6 min)</b></span>
+                </button>
+            </div>
+
+            <div class="split row-gap">
+                <h3 class="sub">The final design</h3>
+                <div class="prose">
+                    <p>As you can appreciate, this is the final design with the visual experience made by the Pulp
+                        agency.</p>
+                </div>
+            </div>
+            <figure class="final">
+                <img src="assets/itsap/final-directory.webp" width="2400" height="1584" loading="lazy"
+                    alt="New Annuaire des laboratoires: tabs for lab list, analysis search and analysis list, a lab list with analysis tags, and a large map of Europe with yellow pins">
+            </figure>
+        </section>
+
+        <!-- TYPES OF SEARCH -->
+        <section class="process">
+            <div class="wrap section">
+                <div class="split">
+                    <h3 class="sub">Types of search</h3>
+                    <div class="prose">
+                        <p>I decided to add 3 types of search depending on the aim of the user:</p>
+                    </div>
+                </div>
+
+                <ul class="types">
+                    <li class="type">
+                        <span class="fr">Liste des laboratoires</span>
+                        <h3>Spatial search</h3>
+                        <p>In the case of beekeeping, users need to find a lab nearby. Once found, they can view the
+                            details to obtain the contact information and make a call, or search for a specific analysis
+                            if they know its name.</p>
+                    </li>
+                    <li class="type">
+                        <span class="fr">Recherche d’analyse</span>
+                        <h3>Analysis search</h3>
+                        <p>In case the user doesn’t know the exact name of the analysis or doesn’t mind traveling to get
+                            the analysis, metadata plays a crucial role in the search process. As one of the ITSAP team
+                            members explained to me, <strong>“there are often very sophisticated analyses that only a
+                                single lab in the entire France can perform. Therefore, relying only on spatial search
+                                may not be the most practical approach. Incorporating metadata such as the type of
+                                analysis and the material to be analyzed (honey, beeswax, etc.) into the search process
+                                is
+                                essential.”</strong></p>
+                    </li>
+                    <li class="type">
+                        <span class="fr">Liste des analyses</span>
+                        <h3>List of analyses</h3>
+                        <p>It is not a search, but a way to see the list of labs in France. This is very useful for the
+                            ITSAP team, and for researchers that interact with multiple labs at the same time.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- NOW -->
+        <section class="wrap section">
+            <div class="outcome">
+                <div class="stack">
+                    <span class="label"><i class="hex" aria-hidden="true"></i>Outcome</span>
+                    <h2>ITSAP <span class="serif">now</span></h2>
+                </div>
+                <div class="stack">
+                    <div class="prose">
+                        <p>The new version of ITSAP is published, you can see it here:</p>
+                    </div>
+                    <div class="links">
+                        <a class="pill" href="https://itsap.asso.fr/" target="_blank" rel="noopener">itsap.asso.fr
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M7 17L17 7M8 7h9v9"></path>
+                            </svg><span class="sr-only">(opens in a new tab)</span></a>
+                        <a class="pill" href="https://itsap.asso.fr/annuaire-des-laboratoires" target="_blank"
+                            rel="noopener">Annuaire des laboratoires
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M7 17L17 7M8 7h9v9"></path>
+                            </svg><span class="sr-only">(opens in a new tab)</span></a>
+                    </div>
+                    <div class="prose">
+                        <p>I proposed adding Hotjar to the new website, but they added only Google Analytics. Sadly, I
+                            couldn’t get access to that data.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEXT -->
+        <section class="wrap" style="padding-bottom: 96px">
+            <a class="next" href="alto.html">
+                <div class="next-copy">
+                    <div>
+                        <span class="eyebrow">Next case study · Alto</span>
+                        <h3>Increasing investment in real estate</h3>
+                    </div>
+                    <span class="next-cta">Read case study
+                        <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14M13 6l6 6-6 6"></path>
+                        </svg></span>
+                </div>
+                <div class="cover"><img src="assets/alto.webp" alt="" loading="lazy"></div>
+            </a>
+            <div class="all-work"><a class="pill" href="index.html#work">See all work</a></div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="wrap" style="padding-bottom: 64px">
+            <div class="contact">
+                <span style="color: #A3A9B1">Contact</span>
+                <h2>Let’s <span class="serif">talk.</span></h2>
+                <p style="margin: 0; max-width: 520px; font-size: 20px; line-height: 30px; color: #C9CDD2">Would you
+                    like to work together? Don’t hesitate to reach out anytime.</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                    <a class="btn" href="mailto:marielguadalupevargas@gmail.com">marielguadalupevargas@gmail.com
+                        <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M8 7h9v9"></path>
+                        </svg>
+                    </a>
+                    <a class="btn line" href="https://www.linkedin.com/in/mariel-guadalupe/">LinkedIn</a>
+                </div>
+            </div>
+            <footer>
+                <span>© 2026 Mariel Guadalupe Vargas</span>
+                <span>Barcelona, Spain</span>
+            </footer>
+        </section>
+    </main>
+
+    <script>
+        // YouTube facade: the player (and its cookies) only loads when someone asks for it.
+        document.querySelectorAll('.play[data-yt]').forEach(function (b) {
+            b.addEventListener('click', function () {
+                var f = document.createElement('iframe');
+                f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.yt + '?autoplay=1&rel=0';
+                f.title = 'Presenting the directory proposal to the ITSAP project manager';
+                f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+                f.allowFullscreen = true;
+                b.parentNode.classList.add('playing');
+                b.parentNode.appendChild(f);
+                b.remove();
+                f.focus();
+            });
+        });
+    </script>
+</body>
+
+</html>
