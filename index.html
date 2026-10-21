@@ -260,7 +260,18 @@
         }
 
         .iso-stage {
-            cursor: default
+            cursor: default;
+            height: 680px
+        }
+
+        .iso-rig {
+            position: absolute;
+            left: 44%;
+            top: 58%;
+            width: 0;
+            height: 0;
+            perspective: 2000px;
+            transform: scale(1.35)
         }
 
         .scene {
@@ -497,6 +508,40 @@
                 display: none
             }
 
+            .iso-stage {
+                height: 500px
+            }
+
+            .cube {
+                animation: none
+            }
+
+            .iso-rig {
+                left: 50%;
+                top: 46%;
+                transform: scale(0.78)
+            }
+
+            .det {
+                max-width: calc(100% - 8px);
+                box-sizing: border-box
+            }
+
+            .det,
+            .det * {
+                white-space: normal !important
+            }
+
+            .contact-mail {
+                min-width: 0;
+                max-width: 100%;
+                box-sizing: border-box;
+                justify-content: center;
+                white-space: normal;
+                overflow-wrap: normal;
+                text-align: center;
+                padding: 14px 18px !important
+            }
         }
 
         @media (hover: none) and (pointer: coarse) {
@@ -580,10 +625,9 @@
                 </div>
 
                 <!-- visual: four lit blocks -->
-                <div class="iso-stage" id="stage" style="position: relative; height: 680px">
+                <div class="iso-stage" id="stage" style="position: relative">
                     <div class="glow" aria-hidden="true"></div>
-                    <div aria-hidden="true"
-                        style="position: absolute; left: 44%; top: 58%; width: 0; height: 0; perspective: 2000px; transform: scale(1.35)">
+                    <div class="iso-rig" aria-hidden="true">
                         <div class="scene" style="transform: rotateX(-12deg) rotateY(-26deg)">
                             <div class="ground"></div>
                             <div class="cubepos" style="transform: translate3d(0px, 0px, 0px)">
@@ -930,7 +974,7 @@
                     style="display: flex; flex-direction: column; gap: 20px">
                     <div class="cover"
                         style="aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; background: #476471"><img
-                            src="https://7f28f3kahgwvczuz.public.blob.vercel-storage.com/assets/alto.webp" alt="Alto web app on desktop"
+                            src="https://7f28f3kahgwvczuz.public.blob.vercel-storage.com/assets/alto/behance-cover%202.png" alt="Alto PM app on three phones beside the Alto logo"
                             style="width: 100%; height: 100%; object-fit: cover; display: block"></div>
                     <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 8px">
                         <span style="color: #5A5F66">Alto · Real estate, Geneva</span>
@@ -1106,8 +1150,8 @@
                 <p style="margin: 0; max-width: 520px; font-size: 20px; line-height: 30px; color: #C9CDD2">Would you
                     like to work together? Don’t hesitate to reach out anytime.</p>
                 <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-                    <a class="btn" href="mailto:marielguadalupevargas@gmail.com"
-                        style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px 14px 28px; border-radius: 9999px; background: #F5F5F1; color: #15171B; font-weight: 500; line-height: 20px">marielguadalupevargas@gmail.com
+                    <a class="btn contact-mail" href="mailto:marielguadalupevargas@gmail.com"
+                        style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px 14px 28px; border-radius: 9999px; background: #F5F5F1; color: #15171B; font-weight: 500; line-height: 20px">Drop me a line
                         <svg class="arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M7 17L17 7M8 7h9v9"></path>
@@ -1128,7 +1172,7 @@
     </div>
     <script>
         (function () {
-            var N = 4, cur = 0, lock = 0;
+            var N = 4, cur = 0, lock = 0, dwell = 0;
             function render() {
                 document.querySelectorAll('[data-k]').forEach(function (el) { var n = +el.dataset.k; el.classList.toggle('lit', cur >= n); el.classList.toggle('on', cur === n); });
                 document.querySelectorAll('[data-d]').forEach(function (el) { el.classList.toggle('show', cur === +el.dataset.d); });
@@ -1145,19 +1189,25 @@
             function syncMode() {
                 var s = isStacked(); if (s === stacked) return;
                 stacked = s;
-                if (isAuto()) { startAuto(); } else { stopAuto(); cur = 0; render(); }
+                if (isAuto()) { startAuto(); } else { stopAuto(); cur = 0; dwell = 0; render(); }
                 applyLock();
             }
             function atTop() { return (window.scrollY || root.scrollTop || 0) < 8; }
-            function applyLock() { root.style.overflow = (!isAuto() && cur < N && atTop()) ? 'hidden' : ''; }
-            function step(d) { var now = Date.now(); if (now - lock < 650) return; var nx = cur + d; if (nx < 0 || nx > N) return; lock = now; cur = nx; render(); }
+            // En el último paso el scroll sigue trabado un gesto más, para poder ver Agentic design.
+            function holding() { return cur < N || (cur === N && dwell < 1); }
+            function applyLock() { root.style.overflow = (!isAuto() && holding() && atTop()) ? 'hidden' : ''; }
+            function step(d) { var now = Date.now(); if (now - lock < 650) return; var nx = cur + d; if (nx < 0 || nx > N) return; lock = now; cur = nx; if (cur < N) dwell = 0; render(); }
             function canStep(d) { return (d > 0 && cur < N) || (d < 0 && cur > 0); }
             function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
             function startAuto() { stopAuto(); timer = setInterval(function () { cur = cur >= N ? 0 : cur + 1; render(); }, 2200); }
             // Desktop: la rueda / teclado dirigen la animación y la página no hace scroll hasta que termina.
             function handle(e, d) {
                 if (isAuto() || !atTop()) return;
-                if (canStep(d) || Date.now() - lock < 700) { e.preventDefault(); step(d); }
+                if (Date.now() - lock < 700) { e.preventDefault(); if (canStep(d)) step(d); return; }
+                if (d > 0 && cur === N && dwell < 1) { e.preventDefault(); dwell = 1; lock = Date.now(); applyLock(); return; }
+                if (d < 0 && cur === N && dwell > 0) { e.preventDefault(); dwell = 0; lock = Date.now(); applyLock(); return; }
+                if (d < 0) dwell = 0;
+                if (canStep(d)) { e.preventDefault(); step(d); }
             }
             window.addEventListener('wheel', function (e) {
                 if (Math.abs(e.deltaY) < 2) return;
@@ -1172,7 +1222,7 @@
             });
             window.addEventListener('scroll', applyLock, { passive: true });
             // Táctil: sin bloqueo de scroll; la animación corre sola en loop.
-            document.querySelectorAll('[data-b]').forEach(function (el) { el.addEventListener('click', function () { cur = +el.dataset.b; render(); if (timer) startAuto(); }); });
+            document.querySelectorAll('[data-b]').forEach(function (el) { el.addEventListener('click', function () { cur = +el.dataset.b; dwell = 0; render(); if (timer) startAuto(); }); });
             window.addEventListener('resize', syncMode);
             stacked = isStacked();
             if (isAuto()) startAuto();
