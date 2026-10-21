@@ -496,11 +496,19 @@
             .hide-sm {
                 display: none
             }
+
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .hint {
+                display: none
+            }
         }
     </style>
     <style>
         html {
-            scroll-behavior: smooth
+            scroll-behavior: smooth;
+            scrollbar-gutter: stable
         }
     </style>
 </head>
@@ -830,7 +838,7 @@
             </div>
 
             <!-- featured: BillionBlocks -->
-            <a class="lift" href="https://guadalupe-vargas.framer.website/billionblocks"
+            <a class="lift" href="billionblocks.html"
                 style="margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); background: #FFFFFF; border-radius: 32px; overflow: hidden; border: 1px solid rgba(21,23,27,0.06)">
                 <div
                     style="padding: 40px; display: flex; flex-direction: column; gap: 32px; justify-content: space-between; min-height: 440px">
@@ -841,7 +849,7 @@
                             BillionBlocks: designing and engineering a design system with AI</h3>
                         <p style="margin: 0; color: #4A4F57; max-width: 480px">It started as a visual audit of a product
                             with no tokens and almost no documentation. It became an accessible, scalable system inside
-                            the company repo — with an AI copilot, a documentation site and an agent that generates
+                            the company repo with an AI copilot, a documentation site and an agent that generates
                             interfaces using only the system.</p>
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
@@ -871,7 +879,7 @@
             <!-- two up -->
             <div
                 style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
-                <a class="lift" href="https://guadalupe-vargas.framer.website/hewlett-packard"
+                <a class="lift" href="hewlett-packard.html"
                     style="display: flex; flex-direction: column; gap: 24px">
                     <div class="cover"
                         style="aspect-ratio: 4 / 3; border-radius: 32px; overflow: hidden; background: #F4F4F4"><img
@@ -886,7 +894,7 @@
                         <span style="color: #5A5F66">Interface refactor · A/B tests · Usability testing</span>
                     </div>
                 </a>
-                <a class="lift" href="https://guadalupe-vargas.framer.website/maison-gatti"
+                <a class="lift" href="maison-gatti.html"
                     style="display: flex; flex-direction: column; gap: 24px">
                     <div class="cover"
                         style="aspect-ratio: 4 / 3; border-radius: 32px; overflow: hidden; background: #F3EFEA"><img
@@ -905,7 +913,7 @@
             <!-- three up -->
             <div
                 style="margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 24px">
-                <a class="lift" href="https://guadalupe-vargas.framer.website/itsap"
+                <a class="lift" href="itsap.html"
                     style="display: flex; flex-direction: column; gap: 20px">
                     <div class="cover"
                         style="aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; background: #2D3A25"><img
@@ -918,7 +926,7 @@
                             Improving scientific platforms and search methods</h3>
                     </div>
                 </a>
-                <a class="lift" href="https://guadalupe-vargas.framer.website/alto"
+                <a class="lift" href="alto.html"
                     style="display: flex; flex-direction: column; gap: 20px">
                     <div class="cover"
                         style="aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; background: #476471"><img
@@ -929,19 +937,6 @@
                         <h3
                             style="margin: 0; font-size: 20px; line-height: 28px; letter-spacing: -0.01em; font-weight: 500">
                             Increasing investment in real estate</h3>
-                    </div>
-                </a>
-                <a class="lift" href="https://guadalupe-vargas.framer.website/bridgebuilders"
-                    style="display: flex; flex-direction: column; gap: 20px">
-                    <div class="cover"
-                        style="aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; background: #E9A93A"><img
-                            src="assets/bridge-builders.webp" alt="Bridge Builders"
-                            style="width: 100%; height: 100%; object-fit: cover; display: block"></div>
-                    <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 8px">
-                        <span style="color: #5A5F66">Bridge Builders · UX/UI designer</span>
-                        <h3
-                            style="margin: 0; font-size: 20px; line-height: 28px; letter-spacing: -0.01em; font-weight: 500">
-                            A new way to generate business connections</h3>
                     </div>
                 </a>
             </div>
@@ -1079,7 +1074,7 @@
                             Argentina.</p>
                         <p style="margin: 0">I’ve worked in small and large teams, led a cross-functional team at
                             ibisdev, and focused on design systems and design operations at HP and Billionhands.</p>
-                        <p style="margin: 0">Outside work, I paint in watercolor — mostly sketches from trips around
+                        <p style="margin: 0">Outside work, I paint in watercolor, mostly sketches from trips around
                             Europe.</p>
                     </div>
                 </div>
@@ -1133,20 +1128,56 @@
     </div>
     <script>
         (function () {
-            var N = 4, cur = 0, lock = 0, ty = null;
+            var N = 4, cur = 0, lock = 0;
             function render() {
                 document.querySelectorAll('[data-k]').forEach(function (el) { var n = +el.dataset.k; el.classList.toggle('lit', cur >= n); el.classList.toggle('on', cur === n); });
                 document.querySelectorAll('[data-d]').forEach(function (el) { el.classList.toggle('show', cur === +el.dataset.d); });
                 document.querySelectorAll('[data-b]').forEach(function (el) { var n = +el.dataset.b; el.classList.toggle('cur', cur === n); el.classList.toggle('done', cur > n); el.setAttribute('aria-pressed', cur === n); });
-                var h = document.querySelector('.hint'); if (h) h.classList.toggle('off', cur !== 0);
+                var h = document.querySelector('.hint'); if (h) h.classList.toggle('off', cur !== 0 || isAuto());
+                if (typeof applyLock === 'function') applyLock();
             }
+            var touchOnly = window.matchMedia('(any-hover: none)').matches, timer = null, root = document.documentElement;
+            var stage = document.getElementById('stage'), stacked = false;
+            // Los cubos pasan debajo del texto cuando el grid (auto-fit) colapsa a una columna.
+            function isStacked() { var t = stage && stage.previousElementSibling; return !!(t && stage.offsetTop > t.offsetTop + 8); }
+            // Modo automático: dispositivo táctil o layout de una columna -> loop solo, sin bloquear el scroll.
+            function isAuto() { return touchOnly || stacked; }
+            function syncMode() {
+                var s = isStacked(); if (s === stacked) return;
+                stacked = s;
+                if (isAuto()) { startAuto(); } else { stopAuto(); cur = 0; render(); }
+                applyLock();
+            }
+            function atTop() { return (window.scrollY || root.scrollTop || 0) < 8; }
+            function applyLock() { root.style.overflow = (!isAuto() && cur < N && atTop()) ? 'hidden' : ''; }
             function step(d) { var now = Date.now(); if (now - lock < 650) return; var nx = cur + d; if (nx < 0 || nx > N) return; lock = now; cur = nx; render(); }
-            function atTop() { return (window.scrollY || document.documentElement.scrollTop || 0) < 8; }
-            window.addEventListener('wheel', function (e) { if (!atTop() || Math.abs(e.deltaY) < 2) return; if (e.deltaY > 0 && cur < N) { e.preventDefault(); step(1); } else if (e.deltaY < 0 && cur > 0) { e.preventDefault(); step(-1); } }, { passive: false });
-            window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; }, { passive: true });
-            window.addEventListener('touchmove', function (e) { if (ty === null || !atTop()) return; var dy = ty - e.touches[0].clientY; if ((dy > 0 && cur < N) || (dy < 0 && cur > 0)) { e.preventDefault(); if (Math.abs(dy) > 40) { step(dy > 0 ? 1 : -1); ty = e.touches[0].clientY; } } }, { passive: false });
-            document.querySelectorAll('[data-b]').forEach(function (el) { el.addEventListener('click', function () { cur = +el.dataset.b; render(); }); });
+            function canStep(d) { return (d > 0 && cur < N) || (d < 0 && cur > 0); }
+            function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+            function startAuto() { stopAuto(); timer = setInterval(function () { cur = cur >= N ? 0 : cur + 1; render(); }, 2200); }
+            // Desktop: la rueda / teclado dirigen la animación y la página no hace scroll hasta que termina.
+            function handle(e, d) {
+                if (isAuto() || !atTop()) return;
+                if (canStep(d) || Date.now() - lock < 700) { e.preventDefault(); step(d); }
+            }
+            window.addEventListener('wheel', function (e) {
+                if (Math.abs(e.deltaY) < 2) return;
+                if (timer && touchOnly) { touchOnly = false; if (!isAuto()) stopAuto(); }
+                handle(e, e.deltaY > 0 ? 1 : -1);
+            }, { passive: false });
+            window.addEventListener('keydown', function (e) {
+                if (isAuto() || e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
+                var t = e.target && e.target.tagName; if (t === 'BUTTON' || t === 'A' || t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
+                var d = (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) ? 1 : (e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) ? -1 : 0;
+                if (d) handle(e, d);
+            });
+            window.addEventListener('scroll', applyLock, { passive: true });
+            // Táctil: sin bloqueo de scroll; la animación corre sola en loop.
+            document.querySelectorAll('[data-b]').forEach(function (el) { el.addEventListener('click', function () { cur = +el.dataset.b; render(); if (timer) startAuto(); }); });
+            window.addEventListener('resize', syncMode);
+            stacked = isStacked();
+            if (isAuto()) startAuto();
             render();
+            applyLock();
         })();
     </script>
 </body>

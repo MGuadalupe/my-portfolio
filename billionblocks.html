@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BillionBlocks — Case study · Guadalupe Vargas</title>
+    <meta name="description" content="Designing and engineering a design system with AI at Billionhands.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #F5F5F1
+        }
+
+        a {
+            color: #131D27;
+            text-decoration: none
+        }
+
+        a:hover {
+            color: #131D27
+        }
+
+        .serif {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: -0.01em
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace
+        }
+
+        .navlink {
+            border-radius: 9999px;
+            transition: background .2s
+        }
+
+        .navlink:hover {
+            background: rgba(19, 29, 39, 0.06)
+        }
+
+        .btn {
+            transition: transform .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .ghost:hover {
+            background: #FFFFFF
+        }
+
+        .toc a {
+            transition: background .2s, color .2s
+        }
+
+        .toc a:hover {
+            background: #FFFFFF
+        }
+
+        .lift .arrow {
+            transition: transform .25s
+        }
+
+        .lift:hover .arrow {
+            transform: translateX(4px)
+        }
+
+        @media (max-width:720px) {
+            .hide-sm {
+                display: none
+            }
+        }
+    </style>
+    <style>
+        html {
+            scroll-behavior: smooth
+        }
+    </style>
+    <style>
+        /* Reveal: los elementos aparecen suavemente (fade + subida) al cargar y al hacer scroll */
+        .js .rv {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 1s cubic-bezier(.2, .7, .2, 1), transform 1.1s cubic-bezier(.2, .7, .2, 1);
+            will-change: opacity, transform
+        }
+
+        .js .rv.in {
+            opacity: 1;
+            transform: none
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .js .rv {
+                opacity: 1;
+                transform: none;
+                transition: none
+            }
+        }
+    </style>
+    <script>document.documentElement.classList.add('js')</script>
+</head>
+
+<body>
+    <div
+        style="font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif; color: #131D27; background: #F5F5F1; font-size: 16px; line-height: 24px; -webkit-font-smoothing: antialiased">
+
+        <!-- NAV -->
+        <header
+            style="position: sticky; top: 0; z-index: 10; background: rgba(245,245,241,0.86); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(19,29,39,0.06)">
+            <nav aria-label="Main"
+                style="max-width: 1200px; margin: 0 auto; padding: 12px clamp(24px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+                <a href="index.html#top"
+                    style="display: flex; align-items: center; gap: 12px; font-weight: 500; min-height: 44px">
+                    <img src="assets/logo.svg" alt="Guadalupe Vargas" style="width: 32px; height: 32px;">
+                    <span>Guadalupe Vargas</span>
+                </a>
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap">
+                    <a class="navlink hide-sm" href="index.html#work" style="padding: 10px 16px">Work</a>
+                    <a class="navlink hide-sm" href="index.html#experience" style="padding: 10px 16px">Experience</a>
+                    <a class="navlink hide-sm" href="index.html#about" style="padding: 10px 16px">About</a>
+                    <a class="navlink hide-sm" href="#contact" style="padding: 10px 16px">Contact</a>
+                    <a class="btn ghost" href="assets/cv-mariel-guadalupe-vargas.pdf"
+                        style="margin-left: 8px; padding: 10px 20px; border-radius: 9999px; border: 1px solid rgba(19,29,39,0.14); display: flex; align-items: center; gap: 8px; font-weight: 500">Résumé
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 4v12M6 10l6 6 6-6M5 20h14"></path>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- HERO -->
+        <section id="top" style="position: relative; background: #131D27; color: #F5F5F1; overflow: hidden">
+            <div aria-hidden="true"
+                style="position: absolute; inset: 0; pointer-events: none; max-width: 1328px; margin: 0 auto; border-left: 1px solid rgba(245,245,241,0.06); border-right: 1px solid rgba(245,245,241,0.06)">
+            </div>
+            <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 40px clamp(24px, 5vw, 64px) 0">
+                <a href="index.html#work"
+                    style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #A3A9B1">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M19 12H5M11 6l-6 6 6 6"></path>
+                    </svg>
+                    All work
+                </a>
+            </div>
+            <div
+                style="position: relative; max-width: 1200px; margin: 0 auto; padding: 48px clamp(24px, 5vw, 64px) 112px; min-height: 440px; display: flex; flex-direction: column; justify-content: center">
+                <div
+                    style="display: flex; flex-direction: column; gap: 28px; position: relative; z-index: 2; max-width: 760px">
+                    <span class="serif"
+                        style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #FD6B6B">Case study ·
+                        Billionhands · 2025</span>
+                    <h1
+                        style="margin: 0; font-size: clamp(44px, 7vw, 104px); line-height: 1; letter-spacing: -0.01em; font-weight: 500">
+                        Billion<span style="color: #FD4444">Blocks</span></h1>
+                    <p
+                        style="margin: 0; max-width: 500px; font-size: clamp(22px, 2.2vw, 28px); line-height: 1.3; letter-spacing: -0.015em; color: #E6E8EA; text-wrap: balance">
+                        Designing and engineering a design system with <span class="serif"
+                            style="color: #FD6B6B">AI</span>.</p>
+                    <p
+                        style="margin: 0; max-width: 480px; font-size: 18px; line-height: 28px; color: #A3A9B1; text-wrap: pretty">
+                        From a visual audit of a product with no tokens and no documentation, to an accessible system
+                        inside the company repo with an AI copilot, a documentation site and an agent that generates
+                        interfaces using only the system.</p>
+                </div>
+                <div aria-hidden="true"
+                    style="position: absolute; z-index: 1; right: -96px; top: 50%; transform: translateY(-50%); width: min(680px, 75%); aspect-ratio: 1 / 1; pointer-events: none">
+                    <img src="assets/billionblocks/bb-hero-cubes.webp" alt=""
+                        style="width: 100%; height: 100%; object-fit: contain; display: block; filter: brightness(0) invert(1); opacity: 0.16">
+                </div>
+            </div>
+            <!-- meta strip -->
+            <div style="position: relative; border-top: 1px solid rgba(245,245,241,0.10)">
+                <dl
+                    style="max-width: 1200px; margin: 0 auto; padding: 32px clamp(24px, 5vw, 64px) 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 24px 32px">
+                    <div style="display: flex; flex-direction: column; gap: 6px">
+                        <dt class="serif" style="font-size: 20px; line-height: 24px; color: #8E96A0">Role</dt>
+                        <dd style="margin: 0; color: #F5F5F1">Product Designer → Design Engineer</dd>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px">
+                        <dt class="serif" style="font-size: 20px; line-height: 24px; color: #8E96A0">Company</dt>
+                        <dd style="margin: 0; color: #F5F5F1">Billionhands</dd>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px">
+                        <dt class="serif" style="font-size: 20px; line-height: 24px; color: #8E96A0">Scope</dt>
+                        <dd style="margin: 0; color: #F5F5F1">Audit · Foundations · Tokens · AI agents</dd>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 6px">
+                        <dt class="serif" style="font-size: 20px; line-height: 24px; color: #8E96A0">Tools</dt>
+                        <dd style="margin: 0; color: #F5F5F1">Figma · Figma MCP · Custom GPTs · Pencil · Vercel</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- INTRO -->
+        <section
+            style="max-width: 1200px; margin: 0 auto; padding: 120px clamp(24px, 5vw, 64px) 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 48px 80px">
+            <div style="display: flex; flex-direction: column; gap: 16px">
+                <span class="serif" style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">00
+                    — The beginning</span>
+                <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">When I joined Billionhands, the
+                    product was growing, but the interface lacked a solid systemic foundation. UI decisions were
+                    functional but not structured. There was no formal design system, no tokens, and no shared
+                    documentation between design and development. So I decided to create Billion Blocks.</p>
+                <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">What began as a visual audit
+                    evolved into the complete creation of an accessible, scalable design system, directly integrated
+                    into the company’s repository.</p>
+            </div>
+            <p
+                style="margin: 0; font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; letter-spacing: -0.025em; font-weight: 500; text-wrap: balance">
+                My role evolved from Product Designer to <span class="serif">Design Engineer</span> as I expanded my
+                practice with AI building agents that generate design and production-ready code from the system.</p>
+        </section>
+
+        <!-- TOC -->
+        <nav aria-label="Chapters" class="toc"
+            style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px)">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); border-top: 1px solid rgba(19,29,39,0.10); border-bottom: 1px solid rgba(19,29,39,0.10)">
+                <a href="#audit"
+                    style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px; min-height: 44px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">01</span><span
+                        style="font-weight: 500">Audit</span></a>
+                <a href="#foundations" style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">02</span><span
+                        style="font-weight: 500">Foundations</span></a>
+                <a href="#copilot" style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">03</span><span
+                        style="font-weight: 500">AI copilot</span></a>
+                <a href="#docs" style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">04</span><span
+                        style="font-weight: 500">Documentation</span></a>
+                <a href="#agent" style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">05</span><span
+                        style="font-weight: 500">Generative agent</span></a>
+                <a href="#outcome" style="display: flex; flex-direction: column; gap: 4px; padding: 20px 16px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #5A5F66">06</span><span
+                        style="font-weight: 500">Outcome</span></a>
+            </div>
+        </nav>
+
+        <!-- 01 AUDIT -->
+        <section id="audit"
+            style="max-width: 1200px; margin: 0 auto; padding: 120px clamp(24px, 5vw, 64px) 0; display: flex; flex-direction: column; gap: 48px">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px 80px; align-items: end">
+                <div style="display: flex; flex-direction: column; gap: 16px">
+                    <span class="serif"
+                        style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">01 —
+                        Audit</span>
+                    <h2
+                        style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500">
+                        Find the problem <span class="serif">before</span> designing.</h2>
+                </div>
+                <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">Before designing any
+                    components, I audited the live platform to understand what was working, what wasn’t, and the
+                    underlying issues.</p>
+            </div>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px">
+                <div
+                    style="background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+                    <span
+                        style="display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 20px; line-height: 28px"><span
+                            style="width: 10px; height: 10px; border-radius: 2px; background: #2A4BD7"></span>Issues
+                        detected</span>
+                    <ul
+                        style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; color: #4A4F57">
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Inconsistent spacing and
+                            typography</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Colors without contrast
+                            validation</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Components with unclear
+                            state definitions</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Hardcoded values in code
+                        </li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Repeated but
+                            unstandardized patternsno guide to follow for new use cases</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(19,29,39,0.08)">Total lack of
+                            documentation</li>
+                    </ul>
+                </div>
+                <div
+                    style="background: #131D27; color: #F5F5F1; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+                    <span
+                        style="display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 20px; line-height: 28px"><span
+                            style="width: 10px; height: 10px; border-radius: 2px; background: #FD4444"></span>Impact</span>
+                    <ul
+                        style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; color: #C9CDD2">
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(245,245,241,0.10)">Constant rework</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(245,245,241,0.10)">Visual bugs</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(245,245,241,0.10)">Accumulated design
+                            debt</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(245,245,241,0.10)">Difficulty scaling new
+                            features</li>
+                        <li style="padding: 12px 0; border-top: 1px solid rgba(245,245,241,0.10)">A significant gap
+                            between what was in production and what was designed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <figure style="margin: 0; display: flex; flex-direction: column; gap: 12px">
+                <div
+                    style="background: #E8EAEC; border-radius: 24px; padding: clamp(12px, 2vw, 24px); overflow: hidden">
+                    <img src="assets/billionblocks/bb-audit.webp"
+                        alt="Audit board with annotated screenshots of the Billionhands platform, flagging inconsistent elements"
+                        style="width: 100%; height: auto; display: block; border-radius: 12px">
+                </div>
+                <figcaption style="font-size: 14px; line-height: 20px; color: #5A5F66">A full audit of the product,
+                    screen by screen.</figcaption>
+            </figure>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px 80px">
+                <div style="display: flex; flex-direction: column; gap: 16px">
+                    <span style="font-weight: 500">What I analysed</span>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Typographic
+                            hierarchies</span>
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Actual
+                            colour usage</span>
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Spacing
+                            and structural consistency</span>
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Interaction
+                            patterns</span>
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Incomplete
+                            or missing states</span>
+                        <span
+                            style="padding: 8px 16px; border-radius: 9999px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.08)">Contrast
+                            under WCAG</span>
+                    </div>
+                </div>
+                <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">This analysis allowed me to
+                    identify systemic inconsistencies and define real priorities, instead of <span class="serif"
+                        style="font-size: 22px; color: #131D27">“redesigning by intuition.”</span></p>
+            </div>
+        </section>
+
+        <!-- 02 FOUNDATIONS -->
+        <section id="foundations"
+            style="max-width: 1200px; margin: 0 auto; padding: 160px clamp(24px, 5vw, 64px) 0; display: flex; flex-direction: column; gap: 48px">
+            <div style="display: flex; flex-direction: column; gap: 16px">
+                <span class="serif" style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">02
+                    — Foundations</span>
+                <h2
+                    style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500">
+                    Accessible <span class="serif">from the outset.</span></h2>
+            </div>
+
+            <!-- color -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 48px 80px; align-items: center">
+                <div style="display: flex; flex-direction: column; gap: 20px">
+                    <h3
+                        style="margin: 0; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">
+                        Color system</h3>
+                    <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">I tested multiple palettes,
+                        prioritising accessibility from the start. There was an initial palette, so I audited every
+                        colour and adjusted its shades to guarantee contrast and legibility.</p>
+                    <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">Contrast was validated not
+                        only in default, but across every interactive state:</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                        <span
+                            style="padding: 10px 16px; border-radius: 8px; background: #D93636; color: #FFFFFF; font-weight: 500">Default</span>
+                        <span
+                            style="padding: 10px 16px; border-radius: 8px; background: #B82828; color: #FFFFFF; font-weight: 500">Hover</span>
+                        <span
+                            style="padding: 10px 16px; border-radius: 8px; background: #9D2A2A; color: #FFFFFF; font-weight: 500">Active</span>
+                        <span
+                            style="padding: 8px 14px; border-radius: 8px; background: #D93636; color: #FFFFFF; font-weight: 500; border: 2px solid #131D27; box-shadow: 0 0 0 2px #F5F5F1 inset">Focus</span>
+                        <span
+                            style="padding: 10px 16px; border-radius: 8px; background: #E4E5E7; color: #5A5F66; font-weight: 500">Disabled</span>
+                        <span
+                            style="padding: 10px 16px; border-radius: 8px; background: #D93636; color: #FFFFFF; font-weight: 500; display: inline-flex; align-items: center; gap: 8px"><svg
+                                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                                <path d="M12 3a9 9 0 1 0 9 9"></path>
+                            </svg>Loading</span>
+                    </div>
+                </div>
+                <div
+                    style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start">
+                    <img src="assets/billionblocks/bb-colors-dark.webp"
+                        alt="Billion Blocks color palette in dark mode: neutrals, red, blue, green, yellow and semantic colors"
+                        style="width: 100%; height: auto; display: block; border-radius: 16px; box-shadow: 0 24px 48px rgba(19,29,39,0.18)">
+                    <img src="assets/billionblocks/bb-colors-light.webp"
+                        alt="Billion Blocks color palette in light mode"
+                        style="width: 100%; height: auto; display: block; border-radius: 16px; margin-top: 48px; box-shadow: 0 24px 48px rgba(19,29,39,0.12)">
+                </div>
+            </div>
+
+            <!-- contrast -->
+            <figure
+                style="margin: 0; background: #131D27; color: #F5F5F1; border-radius: 32px; padding: clamp(24px, 4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px; align-items: center">
+                <figcaption style="display: flex; flex-direction: column; gap: 16px">
+                    <span class="serif"
+                        style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #FD6B6B">WCAG 2.1 ·
+                        AA</span>
+                    <span style="font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">Contrast
+                        testing</span>
+                    <span style="color: #A3A9B1">Every color pair checked against the AA standard in default, hover and
+                        active states, with the ratio recorded for each.</span>
+                </figcaption>
+                <img src="assets/billionblocks/bb-contrast-testing.webp"
+                    alt="Contrast test cards for neutral, red and green palettes showing ratios such as 14.17:1, 7.02:1 and 12.07:1"
+                    style="width: 100%; height: auto; display: block; border-radius: 12px">
+            </figure>
+
+            <!-- tokens -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 40px 80px; align-items: start; padding-top: 48px">
+                <div style="display: flex; flex-direction: column; gap: 20px">
+                    <h3
+                        style="margin: 0; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">
+                        Token inventory</h3>
+                    <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">There are conventions for
+                        building a token inventory but Billionhands already existed and had been built without a design
+                        system. So I aligned with the development team, pulled the repository and studied how they had
+                        structured the CSS classes.</p>
+                    <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">With that in mind, I built
+                        a solid token library <span style="color: #131D27; font-weight: 500">fully aligned with the
+                            frontend.</span></p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                    <div class="serif"
+                        style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 18px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 12px; font-size: 19px; line-height: 24px">
+                        <span style="display: inline-flex; align-items: center; gap: 10px"><span
+                                style="width: 16px; height: 16px; border-radius: 4px; background: #FD4444"></span>--bb-primary-base</span><span
+                            style="color: #5A5F66">brand/red/500</span>
+                    </div>
+                    <div class="serif"
+                        style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 18px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 12px; font-size: 19px; line-height: 24px">
+                        <span style="display: inline-flex; align-items: center; gap: 10px"><span
+                                style="width: 16px; height: 16px; border-radius: 4px; background: #9D2A2A"></span>--bb-primary-strong</span><span
+                            style="color: #5A5F66">brand/red/900</span>
+                    </div>
+                    <div class="serif"
+                        style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 18px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 12px; font-size: 19px; line-height: 24px">
+                        <span style="display: inline-flex; align-items: center; gap: 10px"><span
+                                style="width: 16px; height: 16px; border-radius: 4px; background: #2C4860"></span>--bb-neutral-strong</span><span
+                            style="color: #5A5F66">brand/neutral/500</span>
+                    </div>
+                    <div class="serif"
+                        style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 18px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 12px; font-size: 19px; line-height: 24px">
+                        <span style="display: inline-flex; align-items: center; gap: 10px"><span
+                                style="width: 16px; height: 16px; border-radius: 4px; background: #142029"></span>--bb-neutral-base</span><span
+                            style="color: #5A5F66">brand/neutral/800</span>
+                    </div>
+                </div>
+            </div>
+            <figure
+                style="margin: 0; background: #131D27; border-radius: 24px; padding: clamp(12px, 2vw, 24px); overflow: hidden">
+                <img src="assets/billionblocks/bb-token-inventory.webp"
+                    alt="SCSS brand color variables next to the Figma token table mapping each token to dark and light values"
+                    style="width: 100%; height: auto; display: block; border-radius: 12px">
+            </figure>
+
+            <!-- typography -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 40px 80px; align-items: center; padding-top: 48px">
+                <div style="display: flex; flex-direction: column; gap: 20px">
+                    <h3
+                        style="margin: 0; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">
+                        Typography</h3>
+                    <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">I defined new font sizes
+                        aligned with accessibility standards, and patterns for when to use each size.</p>
+                    <div
+                        style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 16px">
+                        <span
+                            style="font-size: 48px; line-height: 1; letter-spacing: -0.03em; font-weight: 500">16</span>
+                        <div style="display: flex; flex-direction: column"><span style="font-weight: 500">px
+                                minimum</span><span style="color: #5A5F66">for default body text</span></div>
+                    </div>
+                </div>
+                <figure
+                    style="margin: 0; background: #131D27; border-radius: 24px; padding: clamp(12px, 2vw, 24px); overflow: hidden">
+                    <img src="assets/billionblocks/bb-typography.webp"
+                        alt="Heading scale for mobile and desktop, from LG bold 28px to MD regular 24px"
+                        style="width: 100%; height: auto; display: block; border-radius: 12px">
+                </figure>
+            </div>
+        </section>
+
+        <!-- 03 COPILOT -->
+        <section id="copilot"
+            style="margin-top: 160px; background: #FFFFFF; border-top: 1px solid rgba(19,29,39,0.06); border-bottom: 1px solid rgba(19,29,39,0.06)">
+            <div
+                style="max-width: 1200px; margin: 0 auto; padding: 120px clamp(24px, 5vw, 64px); display: flex; flex-direction: column; gap: 64px">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 32px 80px; align-items: end">
+                    <div style="display: flex; flex-direction: column; gap: 16px">
+                        <span class="serif"
+                            style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">03 — AI as
+                            a copilot</span>
+                        <h2
+                            style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500">
+                            Meet <span class="serif">Patty</span>, my design system copilot.</h2>
+                    </div>
+                    <div
+                        style="display: flex; flex-direction: column; gap: 16px; font-size: 18px; line-height: 28px; color: #4A4F57">
+                        <p style="margin: 0">It was time to document everything and keep advancing the system. Following
+                            the traditional process, this would have taken months so why not leverage the tools already
+                            at our fingertips?</p>
+                        <p style="margin: 0">I created Custom GPTs specialised in design-systems engineering, whose main
+                            job was to audit every step I took building Billion Blocks.</p>
+                    </div>
+                </div>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px; align-items: stretch">
+                    <figure
+                        style="margin: 0; background: #F0F1EE; border-radius: 24px; padding: clamp(16px, 3vw, 40px); display: flex; align-items: center">
+                        <img src="assets/billionblocks/bb-patty-copilot.webp"
+                            alt="Patty, a custom GPT described as an agent specialised in documenting Billion Blocks, with suggested prompts"
+                            style="width: 100%; height: auto; display: block; border-radius: 12px; box-shadow: 0 16px 40px rgba(19,29,39,0.10)">
+                    </figure>
+                    <div
+                        style="background: #131D27; color: #F5F5F1; border-radius: 24px; padding: clamp(28px, 4vw, 48px); display: flex; flex-direction: column; gap: 28px; justify-content: space-between">
+                        <div style="display: flex; flex-direction: column; gap: 16px">
+                            <span class="serif"
+                                style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #FD6B6B">The
+                                golden rule</span>
+                            <p
+                                style="margin: 0; font-size: clamp(28px, 3vw, 36px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 500; text-wrap: balance">
+                                Billion Blocks could <span class="serif">not</span> be the single source of truth.</p>
+                            <p style="margin: 0; color: #A3A9B1">So Patty could audit any change or new feature, every
+                                decision had to be cross-checked against mature systems:</p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                            <span
+                                style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(245,245,241,0.14)">Material
+                                Design</span>
+                            <span
+                                style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(245,245,241,0.14)">Carbon</span>
+                            <span
+                                style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(245,245,241,0.14)">Shopify
+                                Polaris</span>
+                            <span
+                                style="padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(245,245,241,0.14)">Atlassian</span>
+                        </div>
+                        <p style="margin: 0; color: #E6E8EA">This turned AI into a <span
+                                style="color: #FD6B6B">strategic validation layer</span>, not just an operational one.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04 DOCS -->
+        <section id="docs"
+            style="max-width: 1200px; margin: 0 auto; padding: 160px clamp(24px, 5vw, 64px) 0; display: flex; flex-direction: column; gap: 48px">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 32px 80px; align-items: end">
+                <div style="display: flex; flex-direction: column; gap: 16px">
+                    <span class="serif"
+                        style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">04 — AI-driven
+                        documentation</span>
+                    <h2
+                        style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500">
+                        Documentation as a <span class="serif">stress test.</span></h2>
+                </div>
+                <div
+                    style="display: flex; flex-direction: column; gap: 16px; font-size: 18px; line-height: 28px; color: #4A4F57">
+                    <p style="margin: 0">With the foundations defined, I needed real adoption and consistency. I built
+                        the design system website with the Figma MCP, under one clear restriction:</p>
+                </div>
+            </div>
+
+            <div
+                style="border-radius: 24px; border: 1px solid rgba(19,29,39,0.06); background: #FFFFFF; padding: clamp(24px, 4vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px 64px; align-items: center">
+                <p
+                    style="margin: 0; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.25; letter-spacing: -0.015em; font-weight: 500">
+                    The model could only use existing components and tokens. No new styles could be created.</p>
+                <p style="margin: 0; font-size: 18px; line-height: 28px; color: #3A3F47">If the MCP needed something
+                    that didn’t exist, the problem was with the system <span class="serif"
+                        style="font-size: 22px; color: #131D27">not the model.</span></p>
+            </div>
+
+            <figure style="margin: 0; display: flex; flex-direction: column; gap: 12px">
+                <div
+                    style="background: #131D27; border-radius: 24px; padding: clamp(12px, 2vw, 24px); overflow: hidden">
+                    <img src="assets/billionblocks/bb-docs-site.webp"
+                        alt="Billion Blocks documentation site, Getting started page with Foundations, Tokens and Patterns sections"
+                        style="width: 100%; height: auto; display: block; border-radius: 12px">
+                </div>
+                <figcaption style="font-size: 14px; line-height: 20px; color: #5A5F66">A functional prototype, deployed
+                    on Vercel.</figcaption>
+            </figure>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); border-top: 1px solid rgba(19,29,39,0.10)">
+                <div style="padding: 24px 24px 24px 0; display: flex; flex-direction: column; gap: 8px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #2A4BD7">A</span><span
+                        style="font-weight: 500">Visualising foundations</span></div>
+                <div style="padding: 24px 24px 24px 0; display: flex; flex-direction: column; gap: 8px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #2A4BD7">B</span><span
+                        style="font-weight: 500">Documenting components</span></div>
+                <div style="padding: 24px 24px 24px 0; display: flex; flex-direction: column; gap: 8px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #2A4BD7">C</span><span
+                        style="font-weight: 500">Showing accessible states</span></div>
+                <div style="padding: 24px 24px 24px 0; display: flex; flex-direction: column; gap: 8px"><span
+                        class="serif" style="font-size: 20px; line-height: 24px; color: #2A4BD7">D</span><span
+                        style="font-weight: 500">Aligning design and development</span></div>
+            </div>
+            <p style="margin: 0; font-size: 18px; line-height: 28px; color: #4A4F57">But above all: validating that the
+                system was <span style="color: #131D27; font-weight: 500">truly usable.</span></p>
+        </section>
+
+        <!-- 05 AGENT -->
+        <section id="agent" style="margin-top: 160px; background: #131D27; color: #F5F5F1">
+            <div
+                style="max-width: 1200px; margin: 0 auto; padding: 120px clamp(24px, 5vw, 64px); display: flex; flex-direction: column; gap: 56px">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 32px 80px; align-items: end">
+                    <div style="display: flex; flex-direction: column; gap: 16px">
+                        <span class="serif"
+                            style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #FD6B6B">05 —
+                            Billion Blocks agent</span>
+                        <h2
+                            style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500">
+                            Generating UI with <span class="serif">only</span> the system.</h2>
+                    </div>
+                    <div
+                        style="display: flex; flex-direction: column; gap: 16px; font-size: 18px; line-height: 28px; color: #A3A9B1">
+                        <p style="margin: 0">Once defined and documented, could the system actually accelerate product
+                            creation? I used Pencil, an AI interface-generation tool, with a clear restriction: every
+                            interface had to be generated exclusively from the design system.</p>
+                    </div>
+                </div>
+
+                <p
+                    style="margin: 0; max-width: 920px; font-size: clamp(26px, 3vw, 40px); line-height: 1.15; letter-spacing: -0.025em; font-weight: 500; text-wrap: balance">
+                    Pixel-perfect, production-ready designs <span class="serif" style="color: #FD6B6B">without</span>
+                    pulling in development resources.</p>
+
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px">
+                    <div
+                        style="border: 1px solid rgba(245,245,241,0.12); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+                        <span class="serif" style="font-size: 20px; line-height: 24px; color: #7FD1A6">✓
+                            components</span><span style="color: #C9CDD2">Reuses components from the design
+                            system</span>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(245,245,241,0.12); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+                        <span class="serif" style="font-size: 20px; line-height: 24px; color: #7FD1A6">✓
+                            patterns</span><span style="color: #C9CDD2">Follows the patterns established with
+                            Patty</span>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(245,245,241,0.12); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+                        <span class="serif" style="font-size: 20px; line-height: 24px; color: #7FD1A6">✓ tokens
+                            only</span><span style="color: #C9CDD2">No fixed values, every variable is a token</span>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(245,245,241,0.12); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px">
+                        <span class="serif" style="font-size: 20px; line-height: 24px; color: #F5C77E">! reports
+                            gaps</span><span style="color: #C9CDD2">Flags missing tokens and inconsistencies</span>
+                    </div>
+                </div>
+
+                <figure style="margin: 0; display: flex; flex-direction: column; gap: 16px">
+                    <div
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px">
+                        <img src="assets/billionblocks/bb-agent-dashboard.webp"
+                            alt="Pencil canvas with a generated New Users dashboard in mobile and desktop, plus implementation notes"
+                            style="width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid rgba(245,245,241,0.08)">
+                        <img src="assets/billionblocks/bb-agent-report.webp"
+                            alt="Close-up of the generated dashboard and the agent's report of applied elements and gaps"
+                            style="width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid rgba(245,245,241,0.08)">
+                    </div>
+                    <figcaption style="max-width: 760px; font-size: 15px; line-height: 24px; color: #A3A9B1">One of the
+                        training runs: a dashboard in desktop and mobile from a single prompt, all values token-based,
+                        with a report of what was applied and the gaps found in the system so they could be resolved.
+                    </figcaption>
+                </figure>
+
+                <p style="margin: 0; max-width: 720px; font-size: 18px; line-height: 28px; color: #C9CDD2">The agent
+                    lives inside the Billionhands repository and became a key tool in the company’s product workflow.
+                </p>
+            </div>
+        </section>
+
+        <!-- 06 OUTCOME -->
+        <section id="outcome"
+            style="max-width: 1200px; margin: 0 auto; padding: 160px clamp(24px, 5vw, 64px) 120px; display: flex; flex-direction: column; gap: 56px">
+            <div style="display: flex; flex-direction: column; gap: 16px; max-width: 880px">
+                <span class="serif" style="font-size: 22px; line-height: 28px; letter-spacing: .01em; color: #2A4BD7">06
+                    — Outcome</span>
+                <h2
+                    style="margin: 0; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 500; text-wrap: balance">
+                    From visual guide to <span class="serif">product-generation infrastructure.</span></h2>
+            </div>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 24px">
+                <div
+                    style="background: #FFFFFF; border: 1px solid rgba(19,29,39,0.06); border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+                    <span style="font-weight: 500; font-size: 20px; line-height: 28px">Strategic outcome</span>
+                    <p style="margin: 0; color: #4A4F57">The combination of three pieces enabled the rapid, consistent
+                        creation of new interfaces aligned with the system:</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px">
+                        <div
+                            style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 12px; background: #F5F5F1">
+                            <span class="serif"
+                                style="font-size: 20px; line-height: 24px; color: #2A4BD7">01</span>Structured tokens
+                        </div>
+                        <div
+                            style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 12px; background: #F5F5F1">
+                            <span class="serif"
+                                style="font-size: 20px; line-height: 24px; color: #2A4BD7">02</span>Accessible
+                            documentation
+                        </div>
+                        <div
+                            style="display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-radius: 12px; background: #F5F5F1">
+                            <span class="serif" style="font-size: 20px; line-height: 24px; color: #2A4BD7">03</span>UI
+                            generation with AI
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style="background: #131D27; color: #F5F5F1; border-radius: 24px; padding: 32px; display: flex; flex-direction: column; gap: 20px; justify-content: space-between">
+                    <div style="display: flex; flex-direction: column; gap: 20px">
+                        <span style="font-weight: 500; font-size: 20px; line-height: 28px">Role evolution</span>
+                        <p
+                            style="margin: 0; font-size: clamp(22px, 2.2vw, 28px); line-height: 1.25; letter-spacing: -0.015em">
+                            At this point, my role naturally evolved into <span class="serif"
+                                style="color: #FD6B6B">Design Engineering.</span></p>
+                    </div>
+                    <p style="margin: 0; color: #A3A9B1">I was no longer just designing interfaces or components, but
+                        building the technical environment that lets new interfaces be generated correctly from the
+                        system.</p>
+                </div>
+            </div>
+
+            <!-- next -->
+            <a class="lift" href="hewlett-packard.html"
+                style="margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; padding: 32px 0; border-top: 1px solid rgba(19,29,39,0.10); border-bottom: 1px solid rgba(19,29,39,0.10)">
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                    <span style="color: #5A5F66">Next case study · HP</span>
+                    <span
+                        style="font-size: clamp(24px, 2.6vw, 32px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 500">Smart
+                        Digitization: AI that turns architectural drawings into vector files</span>
+                </div>
+                <span
+                    style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 9999px; background: #2A4BD7; color: #FFFFFF; flex: none">
+                    <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6"></path>
+                    </svg>
+                </span>
+            </a>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 64px) 64px">
+            <div
+                style="background: #131D27; color: #F5F5F1; border-radius: 32px; padding: clamp(40px, 7vw, 96px); display: flex; flex-direction: column; gap: 40px">
+                <span style="color: #A3A9B1">Contact</span>
+                <h2
+                    style="margin: 0; font-size: clamp(40px, 6.6vw, 80px); line-height: 1.0; letter-spacing: -0.035em; font-weight: 500">
+                    Let’s <span class="serif">talk.</span></h2>
+                <p style="margin: 0; max-width: 520px; font-size: 20px; line-height: 30px; color: #C9CDD2">Would you
+                    like to work together? Don’t hesitate to reach out anytime.</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+                    <a class="btn" href="mailto:marielguadalupevargas@gmail.com"
+                        style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px 14px 28px; border-radius: 9999px; background: #F5F5F1; color: #131D27; font-weight: 500; line-height: 20px; overflow-wrap: anywhere">marielguadalupevargas@gmail.com
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M7 17L17 7M8 7h9v9"></path>
+                        </svg>
+                    </a>
+                    <a class="btn" href="https://www.linkedin.com/in/mariel-guadalupe/"
+                        style="display: inline-flex; padding: 14px 32px; border-radius: 9999px; border: 1px solid rgba(245,245,241,0.24); color: #F5F5F1; font-weight: 500; line-height: 20px">LinkedIn</a>
+                </div>
+            </div>
+            <footer
+                style="margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; color: #5A5F66">
+                <span>© 2026 Mariel Guadalupe Vargas</span>
+                <span>Barcelona, Spain</span>
+            </footer>
+        </section>
+
+    </div>
+    <script>
+            (function () {
+                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (reduce || !('IntersectionObserver' in window)) { document.documentElement.classList.remove('js'); return; }
+
+                var items = [];
+                function add(el, delay) {
+                    if (!el || el.classList.contains('rv')) return;
+                    el.classList.add('rv');
+                    el.style.transitionDelay = delay + 'ms';
+                    items.push(el);
+                }
+
+                // Hero: entrada escalonada al cargar
+                var hero = document.getElementById('top');
+                var d = 0;
+                var back = hero.querySelector('a[href="index.html#work"]'); add(back, d); d += 120;
+                var copy = hero.querySelector('h1').parentElement;
+                Array.prototype.forEach.call(copy.children, function (c) { add(c, d); d += 140; });
+                var meta = hero.querySelector('dl'); if (meta) add(meta, d + 100);
+                var art = hero.querySelector('[aria-hidden="true"][style*="right: -96px"]');
+                if (art) { art.style.opacity = '0'; art.style.transition = 'opacity 1.6s ease-out .5s'; requestAnimationFrame(function () { requestAnimationFrame(function () { art.style.opacity = '1'; }); }); }
+
+                // Resto de secciones: bloques y sus hijos en grid, con pequeño escalonado
+                document.querySelectorAll('body > div > section:not(#top)').forEach(function (sec) {
+                    Array.prototype.forEach.call(sec.children, function (blk, i) {
+                        var isGrid = getComputedStyle(blk).display === 'grid' && blk.children.length > 1 && blk.children.length <= 8;
+                        if (isGrid) {
+                            Array.prototype.forEach.call(blk.children, function (c, j) { add(c, Math.min(j, 5) * 90); });
+                        } else {
+                            add(blk, 0);
+                        }
+                    });
+                });
+
+                function finish(e) {
+                    var el = e.target;
+                    if (e.propertyName !== 'opacity' || !el.classList.contains('rv')) return;
+                    el.classList.remove('rv', 'in');
+                    el.style.transitionDelay = '';
+                    el.style.willChange = '';
+                }
+                document.addEventListener('transitionend', finish);
+
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (en) {
+                        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+
+                // Doble rAF para que el estado inicial (oculto) se pinte antes de animar
+                requestAnimationFrame(function () { requestAnimationFrame(function () { items.forEach(function (el) { io.observe(el); }); }); });
+            })();
+    </script>
+</body>
+
+</html>
