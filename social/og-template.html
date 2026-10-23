@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #ECEEF1;
+    }
+    .wrap {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+    }
+    .glow {
+      position: absolute;
+      left: 18%;
+      top: 8%;
+      width: 60%;
+      height: 70%;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(42, 75, 215, 0.16), transparent);
+      filter: blur(24px);
+      opacity: .7;
+    }
+    .iso-rig {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 0;
+      height: 0;
+      perspective: 2000px;
+      transform: scale(2.1);
+    }
+    .scene {
+      position: absolute;
+      transform-style: preserve-3d;
+      transform: rotateX(-12deg) rotateY(-26deg);
+    }
+    .cubepos, .cube { position: absolute; transform-style: preserve-3d; }
+    .face {
+      position: absolute;
+      left: -48px;
+      top: -48px;
+      width: 96px;
+      height: 96px;
+      box-sizing: border-box;
+      backface-visibility: hidden;
+      border: 1px solid rgba(42, 75, 215, 0.35);
+      background-image:
+        linear-gradient(rgba(42, 75, 215, 0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 75, 215, 0.16) 1px, transparent 1px);
+      background-size: 22px 22px;
+      background-position: -1px -1px;
+    }
+    .ground {
+      position: absolute;
+      left: -180px;
+      top: -180px;
+      width: 360px;
+      height: 360px;
+      transform: translate3d(96px, 48px, 96px) rotateX(90deg);
+      background: radial-gradient(closest-side, rgba(44, 72, 96, 0.22), transparent);
+      filter: blur(8px);
+    }
+    .cube.lit .face { border-color: rgba(42, 75, 215, 0.55); }
+    .cube.on .face {
+      border-color: rgba(42, 75, 215, 0.85);
+      box-shadow: inset 0 0 0 1px rgba(42, 75, 215, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="iso-rig" aria-hidden="true">
+      <div class="scene">
+        <div class="ground"></div>
+        <div class="cubepos" style="transform: translate3d(0,0,0)"><div class="cube lit"><div class="face" style="transform: rotateY(180deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(-90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(96px,0,0)"><div class="cube lit"><div class="face" style="transform: rotateY(180deg) translateZ(48px); background:#E9EDF2"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(192px,0,0)"><div class="cube lit"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(180deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(0,0,96px)"><div class="cube lit"><div class="face" style="transform: rotateY(-90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(96px,0,96px)"><div class="cube lit"><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(0,0,192px)"><div class="cube lit on"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(90deg) translateZ(48px); background:#DCE2E9"></div><div class="face" style="transform: rotateY(-90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(0,-96px,0)"><div class="cube lit"><div class="face" style="transform: rotateY(180deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(-90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(96px,-96px,0)"><div class="cube lit"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(180deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(0,-96px,96px)"><div class="cube lit on"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(-90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(96px,-96px,96px)"><div class="cube lit on"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div><div class="face" style="transform: rotateY(90deg) translateZ(48px); background:#DCE2E9"></div></div></div>
+        <div class="cubepos" style="transform: translate3d(0,-192px,0)"><div class="cube lit on"><div class="face" style="transform: rotateX(90deg) translateZ(48px); background:#FFF"></div><div class="face" style="transform: rotateY(0deg) translateZ(48px); background:#E9EDF2"></div></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
